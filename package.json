@@ -1,15 +1,16 @@
 {
-	"name": "bookmark-manager",
-	"version": "1.0.0",
-	"description": "Chromium Extension",
-	"author": "Iulian Preda",
-	"license": "AGPL-3.0-or-later",
-	"private": true,
-	"scripts": {
-		"build": "node ./build-dist.js && tsc"
-	},
-	"devDependencies": {
-		"@types/chrome": "0.0.88",
-		"typescript": "^3.6.3"
-	}
+    "name": "bookmark-manager",
+    "version": "1.0.0",
+    "description": "Chromium Extension",
+    "author": "Iulian Preda",
+    "license": "AGPL-3.0-or-later",
+    "private": true,
+    "scripts": {
+        "build": "node ./build-dist.js && tsc",
+        "watch": "node ./build-dist.js && tsc --watch"
+    },
+    "devDependencies": {
+        "@types/chrome": "0.0.88",
+        "typescript": "^3.6.3"
+    }
 }
