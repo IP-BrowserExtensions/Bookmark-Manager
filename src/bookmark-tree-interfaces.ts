@@ -1,18 +1,10 @@
 export interface BookmarkTreeNode {
-	children: (BookmarkTreeNode | BookmarkLeaf)[];
-	dateAdded: number;
-	dateGroupModified: number;
-	id: string;
-	index: number;
-	parentId: string;
-	title: string;
-}
-
-export interface BookmarkLeaf {
-	dateAdded: number;
-	id: string;
-	index: number;
-	parentId: string;
-	title: string;
-	url?: string;
+    id: string;
+    title: string;
+    index?: number;
+    parentId?: string;
+    children?: BookmarkTreeNode[];
+    url?: string;
+    dateAdded?: Date;
+    dateGroupModified?: number;
 }
