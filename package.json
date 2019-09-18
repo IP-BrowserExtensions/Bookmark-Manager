@@ -1,0 +1,15 @@
+{
+	"name": "bookmark-manager",
+	"version": "1.0.0",
+	"description": "Chromium Extension",
+	"main": "background.js",
+	"scripts": {
+		"build": "node ./build-dist.js && tsc"
+	},
+	"author": "Iulian Preda",
+	"license": "AGPL-3.0-or-later",
+	"devDependencies ": {
+		"typescript": "^3.6.3",
+		"@types/chrome": "0.0.88"
+	}
+}

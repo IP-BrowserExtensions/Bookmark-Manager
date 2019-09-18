@@ -1,0 +1,17 @@
+{
+	"manifest_version": 2,
+	"name": "Bookmark Manager",
+	"version": "1.0",
+	"description": "Bookmark Manager for Chrome ",
+	"icons": {
+		"128": "./images/Atlassian_icon_128_Rusted.png"
+	},
+	"background": {
+		"scripts": ["./src/background.js"]
+	},
+	"permissions": ["contextMenus", "bookmarks"],
+	"browser_action": {
+		"default_icon": "./images/Atlassian_icon_128_Rusted.png",
+		"default_popup": "popup.html"
+	}
+}
