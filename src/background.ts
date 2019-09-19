@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(function() {
-    chrome.bookmarks.getTree((bookmarkTree) => {
+    chrome.bookmarks.getTree(bookmarkTree => {
         if (!!bookmarkTree) {
             console.log(bookmarkTree);
             chrome.contextMenus.create(
@@ -20,23 +20,24 @@ chrome.runtime.onInstalled.addListener(function() {
 
 function contextMenuAction(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) {
     console.log(info, tab);
-    chrome.bookmarks.getTree((bookmarkTree) => {
-        var a = findBookmark(
+    chrome.bookmarks.getTree(bookmarkTree => {
+        let foundBookmark = findBookmark(
             <chrome.bookmarks.BookmarkTreeNode[]>bookmarkTree[0].children,
             info.menuItemId
         );
-        console.log(a);
+        if (!!foundBookmark) {
+            console.log(foundBookmark);
+            var url = <string>foundBookmark.url;
+            window.open(url, "_blank");
+        }
     });
-    // var sText = info.selectionText;
-    // var url = "https://www.google.com/search?q=" + encodeURIComponent(sText);
-    // window.open(url, "_blank");
 }
 
 function createBookmarkTree(
     bookmarkTree: chrome.bookmarks.BookmarkTreeNode[],
     parentId: string
 ): void {
-    bookmarkTree.forEach((node) => {
+    bookmarkTree.forEach(node => {
         createBookmarkNode(<chrome.bookmarks.BookmarkTreeNode>node, parentId);
         if (!!node.children) {
             createBookmarkTree(node.children, node.id);
@@ -64,19 +65,19 @@ function findBookmark(
     bookmarkTree: chrome.bookmarks.BookmarkTreeNode[],
     id: string
 ): chrome.bookmarks.BookmarkTreeNode | undefined {
-    bookmarkTree.forEach((node) => {
+    let bookmarkNode: chrome.bookmarks.BookmarkTreeNode | undefined;
+    for (let node of bookmarkTree) {
         if (!!node.children) {
-            let bookmarkNode = findBookmark(node.children, id);
-            console.log(bookmarkNode);
+            bookmarkNode = findBookmark(node.children, id);
             if (!!bookmarkNode) {
-                return bookmarkNode;
+                break;
             }
         } else {
-            if (node.id == id) {
-                console.log(node.id, id);
-                return node;
+            if (node.id === id) {
+                bookmarkNode = node;
+                break;
             }
         }
-    });
-    return undefined;
+    }
+    return bookmarkNode;
 }
