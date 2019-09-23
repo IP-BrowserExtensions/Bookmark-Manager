@@ -1,53 +1,44 @@
-let contextMenuId = "root";
-let addOrRemoveOptionId = "addOrRemove";
-let removeBookmarkButtonName = "☆ Remove Bookmark";
-let addBookmarkButtonName = "★ Add Bookmark";
-let removeState = "remove";
-let addState = "add";
-let addOrRemoveOptionActiveState = "add";
+let addOrRemoveOptionId: string = "AddOrRemoveButton";
+
+let removeBookmarkButtonName: string = "☆ Remove Bookmark";
+let addBookmarkButtonName: string = "★ Add Bookmark";
+
+let removeState: string = "remove";
+let addState: string = "add";
+let addOrRemoveOptionActiveState: string = "add";
 
 export function initializeContextMenu() {
     chrome.bookmarks.getTree((bookmarkTree) => {
         if (!!bookmarkTree) {
-            //console.log(bookmarkTree);
             chrome.contextMenus.create(
                 {
-                    id: contextMenuId,
+                    id: bookmarkTree[0].id,
                     title: "Bookmarks",
                     contexts: ["all"]
                 },
                 () =>
-                    createBookmarkTree(
-                        <chrome.bookmarks.BookmarkTreeNode[]>bookmarkTree[0].children,
-                        contextMenuId
-                    )
+                    createBookmarkTree(<chrome.bookmarks.BookmarkTreeNode[]>(
+                        bookmarkTree[0].children
+                    ))
             );
-            createAddOrRemoveBookmarkButton(contextMenuId);
+            createAddOrRemoveBookmarkButton(bookmarkTree[0].id);
         }
     });
 }
 
-export function createBookmarkTree(
-    bookmarkTree: chrome.bookmarks.BookmarkTreeNode[],
-    parentId: string
-): void {
-    bookmarkTree.forEach((node) => {
-        createBookmarkNode(<chrome.bookmarks.BookmarkTreeNode>node, parentId);
+export function createBookmarkTree(bookmarkTreeNode: chrome.bookmarks.BookmarkTreeNode[]): void {
+    bookmarkTreeNode.forEach((node) => {
+        createBookmarkNode(node.id, <string>node.parentId, node.title);
         if (!!node.children) {
-            createBookmarkTree(node.children, node.id);
+            createBookmarkTree(node.children);
         }
     });
 }
 
-export function createBookmarkNode(
-    bookmarkNode: chrome.bookmarks.BookmarkTreeNode,
-    parentId: string
-): void {
-    //console.log(bookmarkNode.title);
-
+export function createBookmarkNode(id: string, parentId: string, title: string): void {
     chrome.contextMenus.create({
-        title: bookmarkNode.title,
-        id: bookmarkNode.id,
+        title: title,
+        id: id,
         parentId: parentId,
         type: "normal",
         contexts: ["all"],
@@ -55,7 +46,7 @@ export function createBookmarkNode(
     });
 }
 
-export function removeBookmarkNode(menuItemId: string): void {
+export function removeBookmarkFromContextMenu(menuItemId: string): void {
     chrome.contextMenus.remove(menuItemId);
 }
 
@@ -89,7 +80,6 @@ export function contextMenuActionOpenBookmark(
     info: chrome.contextMenus.OnClickData,
     tab: chrome.tabs.Tab
 ): void {
-    //console.log(info, tab);
     chrome.bookmarks.get(info.menuItemId, (foundBookmark) => {
         var url = foundBookmark[0].url;
         window.open(url, "_blank");
@@ -114,7 +104,6 @@ export function createAddOrRemoveBookmarkButton(parentId: string): void {
 
 export function toggleAddOrRemoveBookmarkButton(url?: string): void {
     chrome.bookmarks.search({ url: url }, (foundBookmarks) => {
-        //console.log(foundBookmarks);
         if (foundBookmarks.length != 0 && addOrRemoveOptionActiveState == addState) {
             chrome.contextMenus.update(addOrRemoveOptionId, { title: removeBookmarkButtonName });
             addOrRemoveOptionActiveState = removeState;
@@ -131,13 +120,23 @@ export function contextMenuActionAddOrRemoveBookmark(
     info: chrome.contextMenus.OnClickData,
     tab: chrome.tabs.Tab
 ): void {
-    console.log(info, tab);
     chrome.tabs.get(<number>tab.id, (result) => {
         if (addOrRemoveOptionActiveState == addState) {
-            createBookmark(contextMenuId, <string>result.title, <string>result.url);
+            createBookmark(info.parentMenuItemId, <string>result.title, <string>result.url);
         } else {
+            chrome.bookmarks.search({ url: result.url }, (result) => {
+                removeBookmark(result[0].id);
+                removeBookmarkFromContextMenu(result[0].id);
+            });
         }
     });
+}
+
+export function updateContextMenuBookmark(
+    id: string,
+    changeInfo: chrome.bookmarks.BookmarkChangeInfo
+) {
+    chrome.contextMenus.update(id, { title: changeInfo.title });
 }
 
 /**
@@ -146,17 +145,18 @@ export function contextMenuActionAddOrRemoveBookmark(
  */
 export function findBookmark(
     bookmarkTree: chrome.bookmarks.BookmarkTreeNode[],
-    id: string
+    property: any,
+    value: any
 ): chrome.bookmarks.BookmarkTreeNode | undefined {
     let bookmarkNode: chrome.bookmarks.BookmarkTreeNode | undefined;
     for (let node of bookmarkTree) {
         if (!!node.children) {
-            bookmarkNode = findBookmark(node.children, id);
+            bookmarkNode = findBookmark(node.children, "id", value);
             if (!!bookmarkNode) {
                 break;
             }
         } else {
-            if (node.id === id) {
+            if (node[property] === value) {
                 bookmarkNode = node;
                 break;
             }
