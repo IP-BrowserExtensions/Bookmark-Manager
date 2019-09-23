@@ -1,13 +1,12 @@
 let contextMenuId = "root";
 let addOrRemoveOptionId = "addOrRemove";
-let removeBookmarkButtonName = "✰Remove Bookmark";
-let addBookmarkButtonName = "⭐Add Bookmark";
+let removeBookmarkButtonName = "☆ Remove Bookmark";
+let addBookmarkButtonName = "★ Add Bookmark";
 let removeState = "remove";
 let addState = "add";
 let addOrRemoveOptionActiveState = "add";
-let activeTab: chrome.tabs.TabActiveInfo;
 
-chrome.runtime.onInstalled.addListener(() => {
+export function initializeContextMenu() {
     chrome.bookmarks.getTree((bookmarkTree) => {
         if (!!bookmarkTree) {
             //console.log(bookmarkTree);
@@ -26,13 +25,9 @@ chrome.runtime.onInstalled.addListener(() => {
             createAddOrRemoveBookmarkButton(contextMenuId);
         }
     });
-});
+}
 
-// chrome.runtime.onStartup.addListener(() =>{
-
-// })
-
-function createBookmarkTree(
+export function createBookmarkTree(
     bookmarkTree: chrome.bookmarks.BookmarkTreeNode[],
     parentId: string
 ): void {
@@ -44,7 +39,7 @@ function createBookmarkTree(
     });
 }
 
-function createBookmarkNode(
+export function createBookmarkNode(
     bookmarkNode: chrome.bookmarks.BookmarkTreeNode,
     parentId: string
 ): void {
@@ -60,11 +55,11 @@ function createBookmarkNode(
     });
 }
 
-function removeBookmarkNode(menuItemId: string): void {
+export function removeBookmarkNode(menuItemId: string): void {
     chrome.contextMenus.remove(menuItemId);
 }
 
-function createBookmark(parentId: string, title: string, url: string) {
+export function createBookmark(parentId: string, title: string, url: string) {
     chrome.bookmarks.create(
         {
             parentId,
@@ -72,23 +67,25 @@ function createBookmark(parentId: string, title: string, url: string) {
             url
         },
         (result) => {
-            chrome.contextMenus.create({
-                title: result.title,
-                id: result.id,
-                parentId: result.parentId,
-                type: "normal",
-                contexts: ["all"],
-                onclick: contextMenuActionOpenBookmark
-            });
+            if (!!result) {
+                chrome.contextMenus.create({
+                    title: result.title,
+                    id: result.id,
+                    parentId: result.parentId,
+                    type: "normal",
+                    contexts: ["all"],
+                    onclick: contextMenuActionOpenBookmark
+                });
+            }
         }
     );
 }
 
-function removeBookmark(id: string): void {
+export function removeBookmark(id: string): void {
     chrome.bookmarks.remove(id);
 }
 
-function contextMenuActionOpenBookmark(
+export function contextMenuActionOpenBookmark(
     info: chrome.contextMenus.OnClickData,
     tab: chrome.tabs.Tab
 ): void {
@@ -99,26 +96,7 @@ function contextMenuActionOpenBookmark(
     });
 }
 
-chrome.tabs.onActivated.addListener((activeInfo) => {
-    ////console.log(activeInfo);
-    activeTab = activeInfo;
-    chrome.tabs.get(activeInfo.tabId, (result) => {
-        toggleAddOrRemoveBookmarkButton(result.url);
-        ////console.log(result);
-    });
-});
-
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    //console.log(tabId, changeInfo, tab);
-    if (activeTab.tabId == tabId && changeInfo.status == "complete") {
-        chrome.tabs.get(tabId, (result) => {
-            toggleAddOrRemoveBookmarkButton(result.url);
-            ////console.log(result);
-        });
-    }
-});
-
-function createAddOrRemoveBookmarkButton(parentId: string): void {
+export function createAddOrRemoveBookmarkButton(parentId: string): void {
     chrome.contextMenus.create({
         title: addBookmarkButtonName,
         id: addOrRemoveOptionId,
@@ -134,7 +112,7 @@ function createAddOrRemoveBookmarkButton(parentId: string): void {
     });
 }
 
-function toggleAddOrRemoveBookmarkButton(url?: string): void {
+export function toggleAddOrRemoveBookmarkButton(url?: string): void {
     chrome.bookmarks.search({ url: url }, (foundBookmarks) => {
         //console.log(foundBookmarks);
         if (foundBookmarks.length != 0 && addOrRemoveOptionActiveState == addState) {
@@ -149,7 +127,7 @@ function toggleAddOrRemoveBookmarkButton(url?: string): void {
     });
 }
 
-function contextMenuActionAddOrRemoveBookmark(
+export function contextMenuActionAddOrRemoveBookmark(
     info: chrome.contextMenus.OnClickData,
     tab: chrome.tabs.Tab
 ): void {
@@ -166,7 +144,7 @@ function contextMenuActionAddOrRemoveBookmark(
  * Deprecated find function in favour of chrome's api
  * DFS in the Bookmarks tree
  */
-function findBookmark(
+export function findBookmark(
     bookmarkTree: chrome.bookmarks.BookmarkTreeNode[],
     id: string
 ): chrome.bookmarks.BookmarkTreeNode | undefined {
