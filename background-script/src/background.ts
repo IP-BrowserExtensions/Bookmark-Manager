@@ -1,4 +1,4 @@
-import * as helper from './helper';
+import * as helper from "./helper";
 
 let activeTab: chrome.tabs.TabActiveInfo;
 
@@ -10,16 +10,16 @@ chrome.runtime.onStartup.addListener(() => {
     helper.initializeContextMenu();
 });
 
-chrome.tabs.onActivated.addListener((activeInfo) => {
+chrome.tabs.onActivated.addListener(activeInfo => {
     activeTab = activeInfo;
-    chrome.tabs.get(activeInfo.tabId, (result) => {
+    chrome.tabs.get(activeInfo.tabId, result => {
         helper.toggleAddOrRemoveBookmarkButton(result.url);
     });
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (activeTab.tabId == tabId && changeInfo.status == "complete") {
-        chrome.tabs.get(tabId, (result) => {
+        chrome.tabs.get(tabId, result => {
             helper.toggleAddOrRemoveBookmarkButton(result.url);
         });
     }
