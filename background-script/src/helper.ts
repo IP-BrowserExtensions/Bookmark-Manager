@@ -2,6 +2,7 @@ let addOrRemoveOptionId: string = "AddOrRemoveButton";
 
 let removeBookmarkButtonName: string = "☆ Remove Bookmark";
 let addBookmarkButtonName: string = "★ Add Bookmark";
+let bookmarkFolder = "Bookmark Manager";
 
 let removeState: string = "remove";
 let addState: string = "add";
@@ -21,7 +22,15 @@ export function initializeContextMenu() {
                         bookmarkTree[0].children
                     ))
             );
+            console.log(bookmarkTree[0]);
             createAddOrRemoveBookmarkButton(bookmarkTree[0].id);
+            chrome.bookmarks.search({ title: bookmarkFolder }, (result) => {
+                if (!result) {
+                    chrome.bookmarks.search({ title: "Bookmarks bar" }, (result) => {
+                        createBookmark(result[0].id, bookmarkFolder);
+                    });
+                }
+            });
         }
     });
 }
@@ -50,7 +59,7 @@ export function removeBookmarkFromContextMenu(menuItemId: string): void {
     chrome.contextMenus.remove(menuItemId);
 }
 
-export function createBookmark(parentId: string, title: string, url: string) {
+export function createBookmark(parentId: string, title: string, url: string = "") {
     chrome.bookmarks.create(
         {
             parentId,
@@ -122,7 +131,10 @@ export function contextMenuActionAddOrRemoveBookmark(
 ): void {
     chrome.tabs.get(<number>tab.id, (result) => {
         if (addOrRemoveOptionActiveState == addState) {
-            createBookmark(info.parentMenuItemId, <string>result.title, <string>result.url);
+            console.log(info);
+            chrome.bookmarks.search({ title: bookmarkFolder }, (resultValue) => {
+                createBookmark(resultValue[0].id, <string>result.title, <string>result.url);
+            });
         } else {
             chrome.bookmarks.search({ url: result.url }, (result) => {
                 removeBookmark(result[0].id);
