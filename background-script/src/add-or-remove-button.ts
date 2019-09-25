@@ -1,15 +1,16 @@
-import { Bookmarks } from './bookmarks';
-import { ContextMenu } from './context-menu';
+import { Bookmarks } from "./bookmarks";
+import { ContextMenu } from "./context-menu";
 
 export class AddOrRemoveButton {
-    private _contextMenu: ContextMenu;
-    private _bookmarks: Bookmarks;
     private readonly _states: { [state: string]: string } = {
         add: "★ Add Bookmark",
         remove: "☆ Remove Bookmark"
     };
     private _className: string = AddOrRemoveButton.name;
     private _currentState: string = this._states.add;
+
+    private _bookmarks: Bookmarks;
+    private _contextMenu: ContextMenu;
 
     public constructor(contextMenu: ContextMenu, bookmarks: Bookmarks) {
         this._contextMenu = contextMenu;
@@ -22,11 +23,11 @@ export class AddOrRemoveButton {
     }
 
     public toggleButton(url?: string): void {
-        chrome.bookmarks.search({ url: url }, (foundBookmarks) => {
-            if (foundBookmarks.length != 0 && this._currentState == this._states.add) {
+        chrome.bookmarks.search({ url }, (foundBookmarks) => {
+            if (foundBookmarks.length !== 0 && this._currentState === this._states.add) {
                 this.setRemoveState();
             } else {
-                if (foundBookmarks.length == 0 && this._currentState == this._states.remove) {
+                if (foundBookmarks.length === 0 && this._currentState === this._states.remove) {
                     this.setAddState();
                 }
             }
@@ -49,11 +50,11 @@ export class AddOrRemoveButton {
 
     private action(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {
         chrome.tabs.get(<number>tab.id, (result) => {
-            if (this._currentState == this._states.add) {
+            if (this._currentState === this._states.add) {
                 this._bookmarks.quickAdd(result);
             } else {
-                chrome.bookmarks.search({ url: result.url }, (result) => {
-                    this._bookmarks.remove(result[0].id);
+                chrome.bookmarks.search({ url: result.url }, (results) => {
+                    this._bookmarks.remove(results[0].id);
                 });
             }
         });

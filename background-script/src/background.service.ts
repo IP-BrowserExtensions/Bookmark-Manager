@@ -1,6 +1,6 @@
-import { AddOrRemoveButton } from './add-or-remove-button';
-import { Bookmarks } from './bookmarks';
-import { ContextMenu } from './context-menu';
+import { AddOrRemoveButton } from "./add-or-remove-button";
+import { Bookmarks } from "./bookmarks";
+import { ContextMenu } from "./context-menu";
 
 export class BackgroundService {
     private _addOrRemoveButton: AddOrRemoveButton;
@@ -13,6 +13,7 @@ export class BackgroundService {
         this._bookmarks = new Bookmarks(this._contextMenu);
         this._addOrRemoveButton = new AddOrRemoveButton(this._contextMenu, this._bookmarks);
         this.activeTabInfo = { tabId: -1, windowId: -1 };
+        this.initializeActiveTabInfo();
     }
 
     public get addOrRemoveButton() {
@@ -43,6 +44,14 @@ export class BackgroundService {
                         ));
                     }
                 );
+            }
+        });
+    }
+
+    private initializeActiveTabInfo() {
+        chrome.tabs.getCurrent((tab) => {
+            if (!!tab && !!tab.id) {
+                this.activeTabInfo = { tabId: tab.id, windowId: tab.windowId };
             }
         });
     }

@@ -1,6 +1,6 @@
 export class BookmarksBase {
     private _defaultFolders: chrome.bookmarks.BookmarkTreeNode[] = [];
-    private _bookmarksFolder: string = "Bookmark Manager";
+    private _bookmarksFolder = "Bookmark Manager";
 
     constructor() {
         this.createBookmarksFolderIfNonExistent();
@@ -31,7 +31,7 @@ export class BookmarksBase {
     //     });
     // }
 
-    remove(id: string, callBack?: Function): void {
+    remove(id: string, callBack?: () => void): void {
         chrome.bookmarks.remove(id, callBack);
     }
 
@@ -45,10 +45,10 @@ export class BookmarksBase {
 
     createBookmarksFolderIfNonExistent(): void {
         chrome.bookmarks.search({ title: this._bookmarksFolder }, (result) => {
-            if (!!result && result.length == 0) {
+            if (!!result && result.length === 0) {
                 this.create(
                     (<chrome.bookmarks.BookmarkTreeNode>(
-                        this._defaultFolders.find((x) => x.title == "Bookmarks bar")
+                        this._defaultFolders.find((x) => x.title === "Bookmarks bar")
                     )).id,
                     this._bookmarksFolder
                 );

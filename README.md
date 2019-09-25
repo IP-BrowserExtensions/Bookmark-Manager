@@ -1,2 +1,9 @@
 # Bookmark-Manager
- Chromium Extension
+
+Chromium Extension
+
+# Extensions
+
+-   Prettier
+-   TsLint
+-   TypescriptHero

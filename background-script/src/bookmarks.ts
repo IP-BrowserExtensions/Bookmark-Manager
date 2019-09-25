@@ -1,5 +1,5 @@
-import { BookmarksBase } from './bookmarks-base';
-import { ContextMenu } from './context-menu';
+import { BookmarksBase } from "./bookmarks-base";
+import { ContextMenu } from "./context-menu";
 
 export class Bookmarks extends BookmarksBase {
     private _contextMenu: ContextMenu;

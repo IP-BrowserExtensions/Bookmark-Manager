@@ -1,4 +1,4 @@
-import { BackgroundService } from './background.service';
+import { BackgroundService } from "./background.service";
 
 const backgroundService = new BackgroundService();
 
@@ -18,7 +18,7 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (backgroundService.activeTabInfo.tabId == tabId && changeInfo.status == "complete") {
+    if (backgroundService.activeTabInfo.tabId === tabId && changeInfo.status === "complete") {
         chrome.tabs.get(tabId, (result) => {
             backgroundService.addOrRemoveButton.toggleButton(result.url);
         });

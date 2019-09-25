@@ -14,6 +14,7 @@
     "devDependencies": {
         "@types/chrome": "0.0.88",
         "ts-loader": "^6.1.2",
+        "tslint": "^5.20.0",
         "typescript": "^3.6.3",
         "webpack": "^4.40.2",
         "webpack-cli": "^3.3.9"
