@@ -2,13 +2,13 @@ import { Bookmarks } from "./../bookmarks/bookmarks";
 import { AddButton } from "./buttons/add-button";
 import { AddToFolderButton } from "./buttons/add-to-folder-button";
 import { RemoveButton } from "./buttons/remove-button";
-import { ContextMenuSerivce } from "./context-menu.service";
+import { ContextMenuService } from "./context-menu.service";
 
 export class ContextMenu {
     private readonly _addButton: AddButton;
     private readonly _removeButton: RemoveButton;
     private readonly _addToFolderButton: AddToFolderButton;
-    private readonly _contextMenuService: ContextMenuSerivce;
+    private readonly _contextMenuService: ContextMenuService;
     private readonly _bookmarks: Bookmarks;
 
     public constructor() {}

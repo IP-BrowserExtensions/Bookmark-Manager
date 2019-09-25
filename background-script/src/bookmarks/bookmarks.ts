@@ -1,10 +1,10 @@
-import { ContextMenuSerivce } from "../context-menu/context-menu.service";
+import { ContextMenuService } from "../context-menu/context-menu.service";
 import { BookmarksBase } from "./bookmarks-base";
 
 export class Bookmarks extends BookmarksBase {
-    private _contextMenuService: ContextMenuSerivce;
+    private _contextMenuService: ContextMenuService;
 
-    public constructor(contextMenu: ContextMenuSerivce) {
+    public constructor(contextMenu: ContextMenuService) {
         super();
         this._contextMenuService = contextMenu;
     }

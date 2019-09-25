@@ -1,6 +1,6 @@
 import { IContextMenuUpdateProperties } from "./icontext-menu";
 
-export class ContextMenuSerivce {
+export class ContextMenuService {
     public add(
         id: string,
         parentId: string,

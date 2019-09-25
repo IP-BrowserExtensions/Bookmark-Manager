@@ -1,5 +1,5 @@
 import { Bookmarks } from "./bookmarks/bookmarks";
-import { ContextMenuSerivce } from "./context-menu/context-menu.service";
+import { ContextMenuService } from "./context-menu/context-menu.service";
 
 // import { AddOrRemoveButton } from "./ToDelete/add-or-remove-button";
 export class BackgroundService {
@@ -7,10 +7,10 @@ export class BackgroundService {
 
     //private _addOrRemoveButton: AddOrRemoveButton;
     private _bookmarks: Bookmarks;
-    private _contextMenuService: ContextMenuSerivce;
+    private _contextMenuService: ContextMenuService;
 
     public constructor() {
-        this._contextMenuService = new ContextMenuSerivce();
+        this._contextMenuService = new ContextMenuService();
         this._bookmarks = new Bookmarks(this._contextMenuService);
         //this._addOrRemoveButton = new AddOrRemoveButton(this._contextMenuService, this._bookmarks);
         this.activeTabInfo = { tabId: -1, windowId: -1 };

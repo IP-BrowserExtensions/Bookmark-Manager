@@ -1,11 +1,11 @@
-import { ContextMenuSerivce } from "../context-menu.service";
+import { ContextMenuService } from "../context-menu.service";
 
 export abstract class Button {
     private _id: string;
     private _buttonName: string;
-    private _contextMenuService: ContextMenuSerivce;
+    private _contextMenuService: ContextMenuService;
 
-    public constructor(contextMenuService: ContextMenuSerivce, id: string, buttonName: string) {
+    public constructor(contextMenuService: ContextMenuService, id: string, buttonName: string) {
         this._contextMenuService = contextMenuService;
         this._id = id;
         this._buttonName = buttonName;
