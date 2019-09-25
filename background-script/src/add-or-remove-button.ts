@@ -9,8 +9,8 @@ export class AddOrRemoveButton {
     private _className: string = AddOrRemoveButton.name;
     private _currentState: string = this._states.add;
 
-    private _bookmarks: Bookmarks;
     private _contextMenu: ContextMenu;
+    private _bookmarks: Bookmarks;
 
     public constructor(contextMenu: ContextMenu, bookmarks: Bookmarks) {
         this._contextMenu = contextMenu;
@@ -20,18 +20,6 @@ export class AddOrRemoveButton {
     public createButton(parentId: string): void {
         this._contextMenu.add(this._className, parentId, this._states.add, this.action.bind(this));
         this._contextMenu.addSeparator(parentId);
-    }
-
-    public toggleButton(url?: string): void {
-        chrome.bookmarks.search({ url }, (foundBookmarks) => {
-            if (foundBookmarks.length !== 0 && this._currentState === this._states.add) {
-                this.setRemoveState();
-            } else {
-                if (foundBookmarks.length === 0 && this._currentState === this._states.remove) {
-                    this.setAddState();
-                }
-            }
-        });
     }
 
     public setRemoveState() {
@@ -46,6 +34,18 @@ export class AddOrRemoveButton {
             title: this._states.add
         });
         this._currentState = this._states.add;
+    }
+
+    public toggleButton(url?: string): void {
+        chrome.bookmarks.search({ url }, (foundBookmarks) => {
+            if (foundBookmarks.length !== 0 && this._currentState === this._states.add) {
+                this.setRemoveState();
+            } else {
+                if (foundBookmarks.length === 0 && this._currentState === this._states.remove) {
+                    this.setAddState();
+                }
+            }
+        });
     }
 
     private action(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {

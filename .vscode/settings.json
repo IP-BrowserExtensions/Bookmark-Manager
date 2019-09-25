@@ -3,5 +3,7 @@
     "prettier.printWidth": 100,
     "prettier.tabWidth": 4,
     "tslint.enable": true,
-    "prettier.arrowParens": "always"
+    "prettier.arrowParens": "always",
+    "typescriptHero.imports.organizeOnSave": true,
+    "typescriptHero.imports.stringQuoteStyle": "\""
 }

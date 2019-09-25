@@ -7,7 +7,31 @@ export class BookmarksBase {
         this.getDefaultFolders();
     }
 
-    getDefaultFolders() {
+    public quickAdd(tab: chrome.tabs.Tab) {
+        chrome.bookmarks.search({ title: this._bookmarksFolder }, (result) => {
+            this.create(result[0].id, <string>tab.title, <string>tab.url);
+        });
+    }
+
+    // public add(tab: chrome.tabs.Tab) {
+    //     chrome.bookmarks.search({ title: this.bookmarksFolder }, (resultValue) => {
+    //         this.create(resultValue[0].id, <string>tab.title, <string>tab.url);
+    //     });
+    // }
+
+    public remove(id: string, callBack?: () => void): void {
+        chrome.bookmarks.remove(id, callBack);
+    }
+
+    public create(parentId: string, title: string, url?: string) {
+        chrome.bookmarks.create({
+            parentId,
+            title,
+            url
+        });
+    }
+
+    private getDefaultFolders() {
         chrome.bookmarks.getTree((bookmarkTree) => {
             if (!!bookmarkTree) {
                 (<chrome.bookmarks.BookmarkTreeNode[]>bookmarkTree[0].children).forEach(
@@ -19,31 +43,7 @@ export class BookmarksBase {
         });
     }
 
-    quickAdd(tab: chrome.tabs.Tab) {
-        chrome.bookmarks.search({ title: this._bookmarksFolder }, (result) => {
-            this.create(result[0].id, <string>tab.title, <string>tab.url);
-        });
-    }
-
-    // add(tab: chrome.tabs.Tab) {
-    //     chrome.bookmarks.search({ title: this.bookmarksFolder }, (resultValue) => {
-    //         this.create(resultValue[0].id, <string>tab.title, <string>tab.url);
-    //     });
-    // }
-
-    remove(id: string, callBack?: () => void): void {
-        chrome.bookmarks.remove(id, callBack);
-    }
-
-    create(parentId: string, title: string, url?: string) {
-        chrome.bookmarks.create({
-            parentId,
-            title,
-            url
-        });
-    }
-
-    createBookmarksFolderIfNonExistent(): void {
+    private createBookmarksFolderIfNonExistent(): void {
         chrome.bookmarks.search({ title: this._bookmarksFolder }, (result) => {
             if (!!result && result.length === 0) {
                 this.create(

@@ -3,10 +3,11 @@ import { Bookmarks } from "./bookmarks";
 import { ContextMenu } from "./context-menu";
 
 export class BackgroundService {
+    public activeTabInfo: chrome.tabs.TabActiveInfo;
+
     private _addOrRemoveButton: AddOrRemoveButton;
     private _bookmarks: Bookmarks;
     private _contextMenu: ContextMenu;
-    public activeTabInfo: chrome.tabs.TabActiveInfo;
 
     public constructor() {
         this._contextMenu = new ContextMenu();
