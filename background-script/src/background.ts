@@ -1,50 +1,47 @@
-import { BackgroundService } from "./background.service";
+import { ContextMenu } from "./context-menu/context-menu";
+import { IContextMenuUpdateProperties } from "./context-menu/icontext-menu";
 
-const backgroundService = new BackgroundService();
+const contextMenu = new ContextMenu();
+
+let activeTabInfo: chrome.tabs.TabActiveInfo;
 
 chrome.runtime.onInstalled.addListener(() => {
-    backgroundService.initializeContextMenu();
+    contextMenu.initialize();
 });
 
 chrome.runtime.onStartup.addListener(() => {
-    backgroundService.initializeContextMenu();
+    contextMenu.initialize();
 });
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
-    backgroundService.activeTabInfo = activeInfo;
+    activeTabInfo = activeInfo;
     chrome.tabs.get(activeInfo.tabId, (result) => {
-        //backgroundService.addOrRemoveButton.toggleButton(result.url);
+        contextMenu.toggleButtons(result.url);
     });
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (backgroundService.activeTabInfo.tabId === tabId && changeInfo.status === "complete") {
+    if (activeTabInfo.tabId === tabId && changeInfo.status === "complete") {
         chrome.tabs.get(tabId, (result) => {
-            // backgroundService.addOrRemoveButton.toggleButton(result.url);
+            contextMenu.toggleButtons(result.url);
         });
     }
 });
 
-chrome.bookmarks.onChanged.addListener(
-    (id: string, changeInfo: chrome.bookmarks.BookmarkChangeInfo) => {
-        backgroundService.contextMenu.update(id, { title: changeInfo.title });
-    }
-);
+chrome.bookmarks.onChanged.addListener((id: string, changeInfo: IContextMenuUpdateProperties) => {
+    contextMenu.update(id, { title: changeInfo.title });
+});
 
 chrome.bookmarks.onCreated.addListener(
     (id: string, bookmarkTreeNode: chrome.bookmarks.BookmarkTreeNode) => {
-        backgroundService.bookmarks.addToContextMenu(
-            id,
-            <string>bookmarkTreeNode.parentId,
-            bookmarkTreeNode.title
-        );
-        //backgroundService.addOrRemoveButton.setRemoveState();
+        contextMenu.add(id, <string>bookmarkTreeNode.parentId, bookmarkTreeNode.title);
+        contextMenu.setRemoveState();
     }
 );
 
 chrome.bookmarks.onRemoved.addListener(
     (id: string, removeInfo: chrome.bookmarks.BookmarkRemoveInfo) => {
-        backgroundService.bookmarks.removeFromContextMenu(id);
-        //backgroundService.addOrRemoveButton.setAddState();
+        contextMenu.remove(id);
+        contextMenu.setAddState();
     }
 );

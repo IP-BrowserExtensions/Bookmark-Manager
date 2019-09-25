@@ -1,54 +1,25 @@
-import { Bookmarks } from "./bookmarks/bookmarks";
-import { ContextMenuService } from "./context-menu/context-menu.service";
+import { BookmarkService } from "./bookmarks/bookmarkService";
+import { ContextMenu } from "./context-menu/context-menu";
 
-// import { AddOrRemoveButton } from "./ToDelete/add-or-remove-button";
 export class BackgroundService {
     public activeTabInfo: chrome.tabs.TabActiveInfo;
 
-    //private _addOrRemoveButton: AddOrRemoveButton;
-    private _bookmarks: Bookmarks;
-    private _contextMenuService: ContextMenuService;
+    private _bookmarkService: BookmarkService;
+    private _contextMenu: ContextMenu;
 
     public constructor() {
-        this._contextMenuService = new ContextMenuService();
-        this._bookmarks = new Bookmarks(this._contextMenuService);
-        //this._addOrRemoveButton = new AddOrRemoveButton(this._contextMenuService, this._bookmarks);
+        this._contextMenu = new ContextMenu();
+        this._bookmarkService = new BookmarkService();
         this.activeTabInfo = { tabId: -1, windowId: -1 };
         this.initializeActiveTabInfo();
     }
 
-    // public get addOrRemoveButton() {
-    //     // return this._addOrRemoveButton;
-    // }
-
     public get bookmarks() {
-        return this._bookmarks;
+        return this._bookmarkService;
     }
 
     public get contextMenu() {
-        return this._contextMenuService;
-    }
-
-    public initializeContextMenu() {
-        chrome.bookmarks.getTree((bookmarkTree) => {
-            if (!!bookmarkTree) {
-                chrome.contextMenus.create(
-                    {
-                        id: bookmarkTree[0].id,
-                        title: "Bookmarks",
-                        contexts: ["all"]
-                    },
-                    () => {
-                        //this._addOrRemoveButton.createButton(bookmarkTree[0].id);
-
-                        this._contextMenuService.addSeparator(bookmarkTree[0].id);
-                        this._contextMenuService.createBookmarkTree(<
-                            chrome.bookmarks.BookmarkTreeNode[]
-                        >bookmarkTree[0].children);
-                    }
-                );
-            }
-        });
+        return this._contextMenu;
     }
 
     private initializeActiveTabInfo() {
