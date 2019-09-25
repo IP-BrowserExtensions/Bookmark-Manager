@@ -1,6 +1,6 @@
 # Bookmark-Manager
 
-Chromium Extension
+Chromium and Firefox Extension
 
 # Extensions
 
