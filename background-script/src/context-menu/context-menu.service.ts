@@ -1,4 +1,6 @@
-export class ContextMenu {
+import { IContextMenuUpdateProperties } from "./icontext-menu";
+
+export class ContextMenuSerivce {
     public add(
         id: string,
         parentId: string,
@@ -29,8 +31,8 @@ export class ContextMenu {
         chrome.contextMenus.remove(menuItemId);
     }
 
-    public update(id: string, changeInfo: chrome.bookmarks.BookmarkChangeInfo) {
-        chrome.contextMenus.update(id, { title: changeInfo.title });
+    public update(id: string, changeInfo: IContextMenuUpdateProperties) {
+        chrome.contextMenus.update(id, changeInfo);
     }
 
     public openBookmark(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {

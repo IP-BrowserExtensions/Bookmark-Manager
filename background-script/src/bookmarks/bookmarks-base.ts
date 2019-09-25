@@ -7,20 +7,20 @@ export class BookmarksBase {
         this.getDefaultFolders();
     }
 
-    public quickAdd(tab: chrome.tabs.Tab) {
+    public add(title: string, url: string) {
         chrome.bookmarks.search({ title: this._bookmarksFolder }, (result) => {
-            this.create(result[0].id, <string>tab.title, <string>tab.url);
+            this.create(result[0].id, <string>title, <string>url);
         });
     }
 
-    // public add(tab: chrome.tabs.Tab) {
-    //     chrome.bookmarks.search({ title: this.bookmarksFolder }, (resultValue) => {
-    //         this.create(resultValue[0].id, <string>tab.title, <string>tab.url);
-    //     });
-    // }
+    public addTo(title: string, url: string, folderName: string) {
+        chrome.bookmarks.search({ title: folderName }, (resultValue) => {
+            this.create(resultValue[0].id, title, url);
+        });
+    }
 
-    public remove(id: string, callBack?: () => void): void {
-        chrome.bookmarks.remove(id, callBack);
+    public remove(id: string): void {
+        chrome.bookmarks.remove(id);
     }
 
     public create(parentId: string, title: string, url?: string) {

@@ -1,32 +1,32 @@
-import { AddOrRemoveButton } from "./add-or-remove-button";
-import { Bookmarks } from "./bookmarks";
-import { ContextMenu } from "./context-menu";
+import { Bookmarks } from "./bookmarks/bookmarks";
+import { ContextMenuSerivce } from "./context-menu/context-menu.service";
 
+// import { AddOrRemoveButton } from "./ToDelete/add-or-remove-button";
 export class BackgroundService {
     public activeTabInfo: chrome.tabs.TabActiveInfo;
 
-    private _addOrRemoveButton: AddOrRemoveButton;
+    //private _addOrRemoveButton: AddOrRemoveButton;
     private _bookmarks: Bookmarks;
-    private _contextMenu: ContextMenu;
+    private _contextMenuService: ContextMenuSerivce;
 
     public constructor() {
-        this._contextMenu = new ContextMenu();
-        this._bookmarks = new Bookmarks(this._contextMenu);
-        this._addOrRemoveButton = new AddOrRemoveButton(this._contextMenu, this._bookmarks);
+        this._contextMenuService = new ContextMenuSerivce();
+        this._bookmarks = new Bookmarks(this._contextMenuService);
+        //this._addOrRemoveButton = new AddOrRemoveButton(this._contextMenuService, this._bookmarks);
         this.activeTabInfo = { tabId: -1, windowId: -1 };
         this.initializeActiveTabInfo();
     }
 
-    public get addOrRemoveButton() {
-        return this._addOrRemoveButton;
-    }
+    // public get addOrRemoveButton() {
+    //     // return this._addOrRemoveButton;
+    // }
 
     public get bookmarks() {
         return this._bookmarks;
     }
 
     public get contextMenu() {
-        return this._contextMenu;
+        return this._contextMenuService;
     }
 
     public initializeContextMenu() {
@@ -39,10 +39,12 @@ export class BackgroundService {
                         contexts: ["all"]
                     },
                     () => {
-                        this._addOrRemoveButton.createButton(bookmarkTree[0].id);
-                        this._contextMenu.createBookmarkTree(<chrome.bookmarks.BookmarkTreeNode[]>(
-                            bookmarkTree[0].children
-                        ));
+                        //this._addOrRemoveButton.createButton(bookmarkTree[0].id);
+
+                        this._contextMenuService.addSeparator(bookmarkTree[0].id);
+                        this._contextMenuService.createBookmarkTree(<
+                            chrome.bookmarks.BookmarkTreeNode[]
+                        >bookmarkTree[0].children);
                     }
                 );
             }
