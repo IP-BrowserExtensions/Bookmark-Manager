@@ -7,7 +7,7 @@
         "128": "./assets/images/Atlassian_icon_128_Rusted.png"
     },
     "background": {
-        "scripts": ["./background.js"]
+        "scripts": ["./browser-polyfill.js", "./background.js"]
     },
     "permissions": ["contextMenus", "bookmarks", "tabs"],
     "browser_action": {

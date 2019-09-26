@@ -4,10 +4,12 @@ const path = require("path");
 const distPath = "./dist";
 const assetsPath = "./assets";
 const manifestPath = "./manifest.json";
+const polyfillPath = "./node_modules/webextension-polyfill/dist/browser-polyfill.js";
 
 deleteFolderRecursive(distPath);
 copyFolderRecursiveSync(assetsPath, distPath);
 copyFileSync(manifestPath, distPath);
+copyFileSync(polyfillPath, distPath);
 
 function deleteFolderRecursive(target) {
     if (target != "" && target != "./") {
