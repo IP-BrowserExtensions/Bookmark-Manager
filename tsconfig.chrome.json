@@ -1,32 +1,9 @@
 {
+    "extends": "./tsconfig",
     "compilerOptions": {
-        "incremental": true,
-        "target": "es6",
-        "module": "es2015",
-        "allowJs": true,
-        "checkJs": true,
-        "outDir": "background-script/dist",
-        "rootDir": "./",
-        "removeComments": true,
-        "downlevelIteration": true,
-        "strict": true,
-        "noImplicitAny": false,
-        "strictNullChecks": true,
-        "strictFunctionTypes": true,
-        "strictBindCallApply": true,
-        "strictPropertyInitialization": true,
-        "noImplicitThis": true,
-        "alwaysStrict": true,
-        "noUnusedLocals": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true
-    },
-    "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"],
-    "compileOnSave": true,
-    "include": ["background-script/src/background.ts"],
-    "exclude": ["node_modules", "**/*.spec.ts"],
-    "paths": {
-        // "@wrapper/*": ["**/wrapper/**/*.chrome.ts"]
-        "@wrapper/*": ["background-script/src/wrapper/chrome-wrapper/*.chrome.ts"]
+        "typeRoots": ["node_modules/@types"],
+        "paths": {
+            "@wrapper/*": ["background-script/src/wrapper/chrome-wrapper/*.chrome.ts"]
+        }
     }
 }

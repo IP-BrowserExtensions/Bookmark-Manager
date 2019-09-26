@@ -1,4 +1,4 @@
-import { BookmarkService } from "./bookmarks/bookmarkService";
+import { BookmarkService } from "./bookmark/bookmarkService";
 import { ContextMenu } from "./context-menu/context-menu";
 
 export class BackgroundService {
