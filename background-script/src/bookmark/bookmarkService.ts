@@ -1,5 +1,7 @@
+import { IBookmarkSearchQuery } from "./ibookmark";
+
 export class BookmarkService {
-    private _defaultBookmarkFolders: chrome.bookmarks.BookmarkTreeNode[] = [];
+    private _defaultBookmarkFolders: browser.bookmarks.BookmarkTreeNode[] = [];
     private _defaultUserFolder: string;
 
     constructor(defaultFolder = "Bookmark Manager") {
@@ -7,16 +9,16 @@ export class BookmarkService {
         this.getDefaultBookmarkFolders();
     }
 
-    public get(id: string, callback: (results: chrome.bookmarks.BookmarkTreeNode[]) => void): void {
-        chrome.bookmarks.get(id, callback);
+    public get(id: string): Promise<browser.bookmarks.BookmarkTreeNode[]> {
+        return browser.bookmarks.get(id);
     }
 
-    public getTree(callback: (results: chrome.bookmarks.BookmarkTreeNode[]) => void): void {
-        chrome.bookmarks.getTree(callback);
+    public getTree(): Promise<browser.bookmarks.BookmarkTreeNode[]> {
+        return browser.bookmarks.getTree();
     }
 
     public add(title: string, url: string, folderName: string): void {
-        this.search({ title: folderName }, (results) => {
+        this.search({ title: folderName }).then((results) => {
             if (!!results && results.length !== 0) {
                 this.create({ parentId: results[0].id, title, url });
             }
@@ -24,9 +26,9 @@ export class BookmarkService {
     }
 
     public addToDefaultFolder(title: string, url: string): void {
-        this.search({ title: this._defaultUserFolder }, (results) => {
+        this.search({ title: this._defaultUserFolder }).then((results) => {
             if (!results || (!!results && results.length === 0)) {
-                this.createDefaultUserFolder((result) => {
+                this.createDefaultUserFolder().then((result) => {
                     this.create({ parentId: result.id, title, url });
                 });
             }
@@ -35,54 +37,50 @@ export class BookmarkService {
     }
 
     public removeByUrl(url: string) {
-        this.search({ url }, (results) => {
+        this.search({ url }).then((results) => {
             this.remove(results[0].id);
         });
     }
 
-    private remove(id: string, callback?: () => void): void {
-        chrome.bookmarks.remove(id, callback);
+    public search(
+        query: IBookmarkSearchQuery | string
+    ): Promise<browser.bookmarks.BookmarkTreeNode[]> {
+        return browser.bookmarks.search(query);
     }
 
-    private create(
-        { parentId, title, url }: { parentId?: string; title?: string; url?: string },
-        callback?: (result: chrome.bookmarks.BookmarkTreeNode) => void
-    ): void {
-        chrome.bookmarks.create(
-            {
-                parentId,
-                title,
-                url
-            },
-            callback
-        );
+    private remove(id: string): Promise<void> {
+        return browser.bookmarks.remove(id);
     }
 
-    private search(
-        query: chrome.bookmarks.BookmarkSearchQuery,
-        callback: (results: chrome.bookmarks.BookmarkTreeNode[]) => void
-    ) {
-        chrome.bookmarks.search(query, callback);
+    private create({
+        parentId,
+        title,
+        url
+    }: {
+        parentId?: string;
+        title?: string;
+        url?: string;
+    }): Promise<browser.bookmarks.BookmarkTreeNode> {
+        return browser.bookmarks.create({
+            parentId,
+            title,
+            url
+        });
     }
 
-    private createDefaultUserFolder(
-        callback: (result: chrome.bookmarks.BookmarkTreeNode) => void
-    ): void {
-        this.create(
-            {
-                parentId: (<chrome.bookmarks.BookmarkTreeNode>(
-                    this._defaultBookmarkFolders.find((x) => x.title === "Bookmarks bar")
-                )).id,
-                title: this._defaultUserFolder
-            },
-            callback
-        );
+    private createDefaultUserFolder(): Promise<browser.bookmarks.BookmarkTreeNode> {
+        return this.create({
+            parentId: (<browser.bookmarks.BookmarkTreeNode>(
+                this._defaultBookmarkFolders.find((x) => x.title === "Bookmarks bar")
+            )).id,
+            title: this._defaultUserFolder
+        });
     }
 
     private getDefaultBookmarkFolders(): void {
-        chrome.bookmarks.getTree((bookmarkTree) => {
+        browser.bookmarks.getTree().then((bookmarkTree) => {
             if (!!bookmarkTree) {
-                (<chrome.bookmarks.BookmarkTreeNode[]>bookmarkTree[0].children).forEach(
+                (<browser.bookmarks.BookmarkTreeNode[]>bookmarkTree[0].children).forEach(
                     (element) => {
                         this._defaultBookmarkFolders.push({ ...element, children: undefined });
                     }

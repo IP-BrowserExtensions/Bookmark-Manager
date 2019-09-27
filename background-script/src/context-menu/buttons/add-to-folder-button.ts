@@ -10,8 +10,9 @@ export class AddToFolderButton extends Button {
         this._bookmarkService = bookmarkService;
     }
 
-    protected action(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {
-        if (!!tab && tab.url && tab.title) {
+    protected action(info: chrome.contextMenus.OnClickData, tab: browser.tabs.Tab): void {
+        // search the name of the context menu clicked using the id
+        if (!!tab && !!tab.url && !!tab.title) {
             this._bookmarkService.add(tab.title, tab.url, info.menuItemId);
         }
     }

@@ -6,6 +6,7 @@ import { ContextMenuService } from "./context-menu.service";
 import { IContextMenuUpdateProperties } from "./icontext-menu";
 
 export class ContextMenu {
+    private readonly _rootFolderName = "Bookmarks";
     private readonly _addButton: AddButton;
     private readonly _removeButton: RemoveButton;
     private readonly _addToFolderButton: AddToFolderButton;
@@ -27,24 +28,16 @@ export class ContextMenu {
     public initialize() {
         this._bookmarkService.getTree((bookmarkTree) => {
             if (!!bookmarkTree) {
-                chrome.contextMenus.create(
-                    {
-                        id: bookmarkTree[0].id,
-                        title: "Bookmarks",
-                        contexts: ["all"]
-                    },
-                    () => {
-                        this._addButton.createButton(bookmarkTree[0].id);
-                        this._removeButton.createButton(bookmarkTree[0].id);
-                        this._addToFolderButton.createButton(bookmarkTree[0].id);
-                        this._contextMenuService.addSeparator(bookmarkTree[0].id);
-                        this.setAddState();
-
-                        this.createBookmarkTree(<chrome.bookmarks.BookmarkTreeNode[]>(
-                            bookmarkTree[0].children
-                        ));
-                    }
-                );
+                this._contextMenuService.add(bookmarkTree[0].id, this._rootFolderName).then(() => {
+                    this._addButton.createButton(bookmarkTree[0].id);
+                    this._removeButton.createButton(bookmarkTree[0].id);
+                    this._addToFolderButton.createButton(bookmarkTree[0].id);
+                    this._contextMenuService.addSeparator(bookmarkTree[0].id);
+                    this.setAddState();
+                    this.createBookmarkTree(<browser.bookmarks.BookmarkTreeNode[]>(
+                        bookmarkTree[0].children
+                    ));
+                });
             }
         });
     }
@@ -62,7 +55,7 @@ export class ContextMenu {
     }
 
     public toggleButtons(url?: string) {
-        chrome.bookmarks.search({ url }, (results) => {
+        this._bookmarkService.search({ url }, (results) => {
             if (results.length !== 0) {
                 this.setRemoveState();
             } else {
@@ -72,7 +65,7 @@ export class ContextMenu {
     }
 
     public add(id: string, parentId: string, title: string): void {
-        this._contextMenuService.add(id, parentId, title, this.open.bind(this));
+        this._contextMenuService.add(id, title, parentId, this.open.bind(this));
     }
 
     public remove(menuItemId: string): void {
@@ -92,7 +85,7 @@ export class ContextMenu {
         });
     }
 
-    private open(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {
+    private open(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void {
         this._bookmarkService.get(info.menuItemId, (results) => {
             const url = results[0].url;
             window.open(url, "_blank");

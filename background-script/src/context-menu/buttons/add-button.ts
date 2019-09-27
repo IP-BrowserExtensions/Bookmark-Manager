@@ -10,9 +10,9 @@ export class AddButton extends Button {
         this._bookmarkService = bookmarkService;
     }
 
-    protected action(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {
+    protected action(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void {
         if (!!tab && tab.url && tab.title) {
-            this._bookmarkService.addToDefaultFolder(tab.title, info.pageUrl);
+            this._bookmarkService.addToDefaultFolder(tab.title, tab.url);
         }
     }
 }
