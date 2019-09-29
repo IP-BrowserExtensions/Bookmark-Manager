@@ -26,5 +26,6 @@ Chromium and Firefox Extension
 # Architectural decisions
 
 Custom made wrappers over browsers API + multiple tsconfig files instead of using webextension-polyfill.
+Rationale: Cleaner and more maintainable code. Using the webextension-polyfill would solve most of the callback to promise issues but some of the namespaces would still require a wrapper around them.
 Reasoning: The number of API involved is rather small and it would give a better abstractization and understanding of the APIs used
 Tsconfig.json is the base config, it is used for importing

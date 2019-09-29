@@ -3,8 +3,8 @@
     "compilerOptions": {
         "typeRoots": ["node_modules/@types", "node_modules/web-ext-types"],
         "paths": {
-            //"@wrapper/*": ["**/wrapper/**/*.firefox.ts"]
-            "@wrapper/*": ["background-script/src/wrapper/firefox-wrapper/*.firefox.ts"]
+            "@wrapper/*": ["background-script/src/wrapper/*.firefox.ts"],
+            "@helpers/*": ["background-script/src/helpers/*.ts"]
         }
     }
 }
