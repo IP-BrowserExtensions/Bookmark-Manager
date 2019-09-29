@@ -1,4 +1,4 @@
-import { BookmarkService } from "../../bookmark/bookmarkService";
+import { BookmarkService } from "../../bookmark/bookmark.service";
 import { ContextMenuService } from "../context-menu.service";
 import { Button } from "./button";
 
@@ -10,7 +10,7 @@ export class RemoveButton extends Button {
         this._bookmarkService = bookmarkService;
     }
 
-    protected action(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {
+    protected action(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void {
         if (!!tab && !!tab.url) {
             this._bookmarkService.removeByUrl(tab.url);
         }

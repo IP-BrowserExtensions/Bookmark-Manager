@@ -1,36 +1,49 @@
-import { IBookmarkTreeNode } from "./bookmark-interface-wrapper.firefox";
+import {
+    IBookmarkChanges,
+    IBookmarkCreate,
+    IBookmarkDestination,
+    IBookmarkSearchQuery,
+    IBookmarkTreeNode,
+} from "@wrapper/bookmark/bookmark-interface-wrapper";
 
 export class BookmarkWrapper {
-    public get(id: string): Promise<IBookmarkTreeNode[]> {
+    public static get(id: string): Promise<IBookmarkTreeNode[]> {
         return browser.bookmarks.get(id);
     }
 
-    public getTree(callback: (results: browser.bookmarks.BookmarkTreeNode[]) => void): void {
-        browser.bookmarks.getTree(callback);
+    public static getChildren(id: string): Promise<IBookmarkTreeNode[]> {
+        return browser.bookmarks.getChildren(id);
     }
 
-    private remove(id: string, callback?: () => void): void {
-        browser.bookmarks.remove(id, callback);
+    public static getTree(): Promise<IBookmarkTreeNode[]> {
+        return browser.bookmarks.getTree();
     }
 
-    private create(
-        { parentId, title, url }: { parentId?: string; title?: string; url?: string },
-        callback?: (result: browser.bookmarks.BookmarkTreeNode) => void
-    ): void {
-        browser.bookmarks.create(
-            {
-                parentId,
-                title,
-                url
-            },
-            callback
-        );
+    public static getSubTree(id: string): Promise<[IBookmarkTreeNode]> {
+        return browser.bookmarks.getSubTree(id);
     }
 
-    private search(
-        query: browser.bookmarks.BookmarkSearchQuery,
-        callback: (results: browser.bookmarks.BookmarkTreeNode[]) => void
-    ) {
-        browser.bookmarks.search(query, callback);
+    public static search(query: IBookmarkSearchQuery | string): Promise<IBookmarkTreeNode[]> {
+        return browser.bookmarks.search(query);
+    }
+
+    public static create(bookmark: IBookmarkCreate): Promise<IBookmarkTreeNode> {
+        return browser.bookmarks.create(bookmark);
+    }
+
+    public static move(id: string, destination: IBookmarkDestination): Promise<IBookmarkTreeNode> {
+        return browser.bookmarks.move(id, destination);
+    }
+
+    public static update(id: string, changes: IBookmarkChanges): Promise<IBookmarkTreeNode> {
+        return browser.bookmarks.update(id, changes);
+    }
+
+    public static remove(id: string): Promise<void> {
+        return browser.bookmarks.remove(id);
+    }
+
+    public static removeTree(id: string): Promise<void> {
+        return browser.bookmarks.removeTree(id);
     }
 }

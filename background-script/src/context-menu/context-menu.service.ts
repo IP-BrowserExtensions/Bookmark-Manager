@@ -1,37 +1,32 @@
-import { IContextMenuUpdateProperties } from "./icontext-menu";
+import { ContextMenuWrapper } from "@wrapper/context-menu/context-menu-wrapper";
 
 export class ContextMenuService {
     public add(
         id: string,
-        parentId: string,
         title: string,
-        onClickFunction: (info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab) => void,
-        type: string = "normal",
-        contexts: string[] = ["all"]
-    ): void {
-        chrome.contextMenus.create({
-            title,
+        parentId?: string,
+        onclick?: (info: browser.menus.OnClickData, tab: browser.tabs.Tab) => void,
+        type: browser.menus.ItemType = "normal",
+        contexts: browser.menus.ContextType[] = ["all"]
+    ): Promise<void> {
+        return ContextMenuWrapper.create({
             id,
+            title,
             parentId,
             type,
             contexts,
-            onclick: onClickFunction
+            onclick
         });
     }
 
-    public addSeparator(parentId: string, contexts: string[] = ["all"]): void {
-        chrome.contextMenus.create({
+    public addSeparator(
+        parentId: string,
+        contexts: browser.menus.ContextType[] = ["all"]
+    ): Promise<void> {
+        return ContextMenuWrapper.create({
             parentId,
             type: "separator",
             contexts
         });
-    }
-
-    public remove(menuItemId: string): void {
-        chrome.contextMenus.remove(menuItemId);
-    }
-
-    public update(id: string, changeInfo: IContextMenuUpdateProperties) {
-        chrome.contextMenus.update(id, changeInfo);
     }
 }

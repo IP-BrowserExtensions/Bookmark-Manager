@@ -1,4 +1,4 @@
-import { BookmarkService } from "../../bookmark/bookmarkService";
+import { BookmarkService } from "../../bookmark/bookmark.service";
 import { ContextMenuService } from "../context-menu.service";
 import { Button } from "./button";
 
@@ -10,9 +10,11 @@ export class AddToFolderButton extends Button {
         this._bookmarkService = bookmarkService;
     }
 
-    protected action(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {
-        if (!!tab && tab.url && tab.title) {
-            this._bookmarkService.add(tab.title, tab.url, info.menuItemId);
-        }
+    protected action(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void {
+        this._bookmarkService.get(`${info.menuItemId}`).then((results) => {
+            if (!!tab && !!tab.url && !!tab.title) {
+                this._bookmarkService.add(tab.title, tab.url, results[0].title);
+            }
+        });
     }
 }

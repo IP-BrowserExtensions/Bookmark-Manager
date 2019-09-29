@@ -1,47 +1,45 @@
 import { ContextMenu } from "./context-menu/context-menu";
-import { IContextMenuUpdateProperties } from "./context-menu/icontext-menu";
 
 const contextMenu = new ContextMenu();
 
-let activeTabInfo: chrome.tabs.TabActiveInfo;
+let activeTabInfo: {
+    tabId: number;
+    windowId: number;
+};
 
-chrome.runtime.onInstalled.addListener(() => {
+browser.runtime.onInstalled.addListener(() => {
     contextMenu.initialize();
 });
 
-chrome.runtime.onStartup.addListener(() => {
+browser.runtime.onStartup.addListener(() => {
     contextMenu.initialize();
 });
 
-chrome.tabs.onActivated.addListener((activeInfo) => {
+browser.tabs.onActivated.addListener((activeInfo) => {
     activeTabInfo = activeInfo;
-    chrome.tabs.get(activeInfo.tabId, (result) => {
+    browser.tabs.get(activeInfo.tabId).then((result) => {
         contextMenu.toggleButtons(result.url);
     });
 });
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (activeTabInfo.tabId === tabId && changeInfo.status === "complete") {
-        chrome.tabs.get(tabId, (result) => {
+        browser.tabs.get(tabId).then((result) => {
             contextMenu.toggleButtons(result.url);
         });
     }
 });
 
-chrome.bookmarks.onChanged.addListener((id: string, changeInfo: IContextMenuUpdateProperties) => {
+browser.bookmarks.onChanged.addListener((id, changeInfo) => {
     contextMenu.update(id, { title: changeInfo.title });
 });
 
-chrome.bookmarks.onCreated.addListener(
-    (id: string, bookmarkTreeNode: chrome.bookmarks.BookmarkTreeNode) => {
-        contextMenu.add(id, <string>bookmarkTreeNode.parentId, bookmarkTreeNode.title);
-        contextMenu.setRemoveState();
-    }
-);
+browser.bookmarks.onCreated.addListener((id, bookmarkTreeNode) => {
+    contextMenu.add(id, <string>bookmarkTreeNode.parentId, bookmarkTreeNode.title);
+    contextMenu.setRemoveState();
+});
 
-chrome.bookmarks.onRemoved.addListener(
-    (id: string, removeInfo: chrome.bookmarks.BookmarkRemoveInfo) => {
-        contextMenu.remove(id);
-        contextMenu.setAddState();
-    }
-);
+browser.bookmarks.onRemoved.addListener((id, removeInfo) => {
+    contextMenu.remove(id);
+    contextMenu.setAddState();
+});

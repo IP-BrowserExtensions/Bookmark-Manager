@@ -1,4 +1,4 @@
-import { BookmarkService } from "../bookmark/bookmarkService";
+import { BookmarkService } from "./../bookmark/bookmark.service";
 import { AddButton } from "./buttons/add-button";
 import { AddToFolderButton } from "./buttons/add-to-folder-button";
 import { RemoveButton } from "./buttons/remove-button";
@@ -6,6 +6,7 @@ import { ContextMenuService } from "./context-menu.service";
 import { IContextMenuUpdateProperties } from "./icontext-menu";
 
 export class ContextMenu {
+    private readonly _rootFolderName = "Bookmarks";
     private readonly _addButton: AddButton;
     private readonly _removeButton: RemoveButton;
     private readonly _addToFolderButton: AddToFolderButton;
@@ -25,26 +26,18 @@ export class ContextMenu {
     }
 
     public initialize() {
-        this._bookmarkService.getTree((bookmarkTree) => {
+        this._bookmarkService.getTree().then((bookmarkTree) => {
             if (!!bookmarkTree) {
-                chrome.contextMenus.create(
-                    {
-                        id: bookmarkTree[0].id,
-                        title: "Bookmarks",
-                        contexts: ["all"]
-                    },
-                    () => {
-                        this._addButton.createButton(bookmarkTree[0].id);
-                        this._removeButton.createButton(bookmarkTree[0].id);
-                        this._addToFolderButton.createButton(bookmarkTree[0].id);
-                        this._contextMenuService.addSeparator(bookmarkTree[0].id);
-                        this.setAddState();
-
-                        this.createBookmarkTree(<chrome.bookmarks.BookmarkTreeNode[]>(
-                            bookmarkTree[0].children
-                        ));
-                    }
-                );
+                this._contextMenuService.add(bookmarkTree[0].id, this._rootFolderName).then(() => {
+                    this._addButton.createButton(bookmarkTree[0].id);
+                    this._removeButton.createButton(bookmarkTree[0].id);
+                    this._addToFolderButton.createButton(bookmarkTree[0].id);
+                    this._contextMenuService.addSeparator(bookmarkTree[0].id);
+                    this.setAddState();
+                    this.createBookmarkTree(<browser.bookmarks.BookmarkTreeNode[]>(
+                        bookmarkTree[0].children
+                    ));
+                });
             }
         });
     }
@@ -62,7 +55,7 @@ export class ContextMenu {
     }
 
     public toggleButtons(url?: string) {
-        chrome.bookmarks.search({ url }, (results) => {
+        this._bookmarkService.search({ url }).then((results) => {
             if (results.length !== 0) {
                 this.setRemoveState();
             } else {
@@ -72,7 +65,7 @@ export class ContextMenu {
     }
 
     public add(id: string, parentId: string, title: string): void {
-        this._contextMenuService.add(id, parentId, title, this.open.bind(this));
+        this._contextMenuService.add(id, title, parentId, this.open.bind(this));
     }
 
     public remove(menuItemId: string): void {
@@ -83,7 +76,7 @@ export class ContextMenu {
         this._contextMenuService.update(id, changeInfo);
     }
 
-    public createBookmarkTree(bookmarkTreeNode: chrome.bookmarks.BookmarkTreeNode[]): void {
+    public createBookmarkTree(bookmarkTreeNode: browser.bookmarks.BookmarkTreeNode[]): void {
         bookmarkTreeNode.forEach((node) => {
             this.add(node.id, <string>node.parentId, node.title);
             if (!!node.children) {
@@ -92,10 +85,13 @@ export class ContextMenu {
         });
     }
 
-    private open(info: chrome.contextMenus.OnClickData, tab: chrome.tabs.Tab): void {
-        this._bookmarkService.get(info.menuItemId, (results) => {
+    private open(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void {
+        console.log(info, tab);
+        this._bookmarkService.get(<string>info.menuItemId).then((results) => {
             const url = results[0].url;
-            window.open(url, "_blank");
+            console.log(url);
+            browser.tabs.create({ active: true, url, windowId: tab.windowId });
+            // window.open(url, "_blank");
         });
     }
 }
