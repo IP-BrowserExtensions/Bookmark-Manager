@@ -1,9 +1,10 @@
+import { IContextMenuUpdateProperties } from "@wrapper/context-menu/context-menu-interface-wrapper";
+
 import { BookmarkService } from "./../bookmark/bookmark.service";
 import { AddButton } from "./buttons/add-button";
 import { AddToFolderButton } from "./buttons/add-to-folder-button";
 import { RemoveButton } from "./buttons/remove-button";
 import { ContextMenuService } from "./context-menu.service";
-import { IContextMenuUpdateProperties } from "./icontext-menu";
 
 export class ContextMenu {
     private readonly _rootFolderName = "Bookmarks";
