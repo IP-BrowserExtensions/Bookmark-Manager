@@ -9,14 +9,15 @@
         "build": "node ./build-dist.js && tsc",
         "watch": "node ./build-dist.js && tsc --watch",
         "build:webpack": "node ./build-dist.js && webpack",
-        "watch:webpack": "node ./build-dist.js && webpack --watch"
+        "watch:webpack": "node ./build-dist.js && webpack --watch",
+        "watch:firefox": " cd ./dist && web-ext run"
     },
     "devDependencies": {
         "@types/chrome": "0.0.88",
         "ts-loader": "^6.1.2",
         "tslint": "^5.20.0",
         "typescript": "^3.6.3",
-        "web-ext-types": "^3.2.1",
+        "web-ext-types": "IulianOctavianPreda/web-ext-types#master",
         "webpack": "^4.40.2",
         "webpack-cli": "^3.3.9"
     }
