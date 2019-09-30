@@ -1,74 +1,55 @@
 import { BookmarkApiService } from "@api/bookmark/bookmark-api.service";
-import { IBookmarkSearchQuery } from "@api/bookmark/types/bookmark-api";
+import { IBookmarkTreeNode } from "@api/bookmark/types/bookmark-api";
 
 export class BookmarkService {
-    private _defaultBookmarkFolders: browser.bookmarks.BookmarkTreeNode[] = [];
-    private _defaultUserFolder: string;
+    private _bookmarkApiService: BookmarkApiService;
+    private _rootFolders: IBookmarkTreeNode[] = [];
+    private _userFolder: string;
 
-    constructor(defaultFolder = "Bookmark Manager") {
-        this._defaultUserFolder = defaultFolder;
+    constructor(bookmarkApiService: BookmarkApiService, userFolder = "Bookmark Manager") {
+        this._bookmarkApiService = bookmarkApiService;
+        this._userFolder = userFolder;
         this.getDefaultBookmarkFolders();
     }
 
     public add(title: string, url: string, folderName: string): void {
-        this.search({ title: folderName }).then((results) => {
+        this._bookmarkApiService.search({ title: folderName }).then((results) => {
             if (!!results && results.length !== 0) {
-                BookmarkApiService.create({ parentId: results[0].id, title, url });
+                this._bookmarkApiService.create({ parentId: results[0].id, title, url });
             }
         });
     }
 
-    public addToDefaultFolder(title: string, url: string): void {
-        this.search({ title: this._defaultUserFolder }).then((results) => {
+    public addToUserFolder(title: string, url: string): void {
+        this._bookmarkApiService.search({ title: this._userFolder }).then((results) => {
             if (!results || (!!results && results.length === 0)) {
-                this.createDefaultUserFolder().then((result) => {
-                    BookmarkApiService.create({ parentId: result.id, title, url });
+                this.createUserFolder().then((result) => {
+                    this._bookmarkApiService.create({ parentId: result.id, title, url });
                 });
             }
-            BookmarkApiService.create({ parentId: results[0].id, title, url });
+            this._bookmarkApiService.create({ parentId: results[0].id, title, url });
         });
     }
 
     public removeByUrl(url: string) {
-        this.search({ url }).then((results) => {
-            this.remove(results[0].id);
+        this._bookmarkApiService.search({ url }).then((results) => {
+            this._bookmarkApiService.remove(results[0].id);
         });
     }
 
-    public get(id: string): Promise<browser.bookmarks.BookmarkTreeNode[]> {
-        return BookmarkApiService.get(id);
-    }
-
-    public getTree(): Promise<browser.bookmarks.BookmarkTreeNode[]> {
-        return BookmarkApiService.getTree();
-    }
-    public search(
-        query: IBookmarkSearchQuery | string
-    ): Promise<browser.bookmarks.BookmarkTreeNode[]> {
-        return BookmarkApiService.search(query);
-    }
-
-    private remove(id: string): Promise<void> {
-        return BookmarkApiService.remove(id);
-    }
-
-    private createDefaultUserFolder(): Promise<browser.bookmarks.BookmarkTreeNode> {
-        return BookmarkApiService.create({
-            parentId: (<browser.bookmarks.BookmarkTreeNode>(
-                this._defaultBookmarkFolders.find((x) => x.title === "Bookmarks bar")
-            )).id,
-            title: this._defaultUserFolder
+    private createUserFolder(): Promise<IBookmarkTreeNode> {
+        return this._bookmarkApiService.create({
+            parentId: (<IBookmarkTreeNode>this._rootFolders[0]).id,
+            title: this._userFolder
         });
     }
 
     private getDefaultBookmarkFolders(): void {
-        BookmarkApiService.getTree().then((bookmarkTree) => {
+        this._bookmarkApiService.getTree().then((bookmarkTree) => {
             if (!!bookmarkTree) {
-                (<browser.bookmarks.BookmarkTreeNode[]>bookmarkTree[0].children).forEach(
-                    (element) => {
-                        this._defaultBookmarkFolders.push({ ...element, children: undefined });
-                    }
-                );
+                (<IBookmarkTreeNode[]>bookmarkTree[0].children).forEach((element) => {
+                    this._rootFolders.push({ ...element, children: undefined });
+                });
             }
         });
     }

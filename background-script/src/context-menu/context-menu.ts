@@ -1,4 +1,7 @@
-import { IContextMenuUpdateProperties } from "@api/context-menu/types/context-menu-api";
+import { BookmarkApiService } from "@api/bookmark/bookmark-api.service";
+import { IBookmarkTreeNode } from "@api/bookmark/types/bookmark-api";
+import { ContextMenuApiService } from "@api/context-menu/context-menu-api.service";
+import { IContextMenuOnClickData, IContextMenuUpdateProperties } from "@api/context-menu/types/context-menu-api";
 
 import { BookmarkService } from "./../bookmark/bookmark.service";
 import { AddButton } from "./buttons/add-button";
@@ -12,22 +15,35 @@ export class ContextMenu {
     private readonly _removeButton: RemoveButton;
     private readonly _addToFolderButton: AddToFolderButton;
     private readonly _contextMenuService: ContextMenuService;
-    private readonly _bookmarkService: BookmarkService;
+    private readonly _contextMenuApiService: ContextMenuApiService;
+    private readonly _bookmarkApiService: BookmarkApiService;
 
     public constructor(
-        contextMenuService = new ContextMenuService(),
-        bookmarkService = new BookmarkService()
+        contextMenuApiService: ContextMenuApiService = new ContextMenuApiService(),
+        contextMenuService: ContextMenuService = new ContextMenuService(contextMenuApiService),
+        bookmarkApiService: BookmarkApiService = new BookmarkApiService(),
+        bookmarkService: BookmarkService = new BookmarkService(bookmarkApiService)
     ) {
         this._contextMenuService = contextMenuService;
-        this._bookmarkService = bookmarkService;
+        this._contextMenuApiService = contextMenuApiService;
+        this._bookmarkApiService = bookmarkApiService;
 
-        this._addButton = new AddButton(contextMenuService, bookmarkService);
-        this._removeButton = new RemoveButton(contextMenuService, bookmarkService);
-        this._addToFolderButton = new AddToFolderButton(contextMenuService, bookmarkService);
+        this._addButton = new AddButton(contextMenuService, contextMenuApiService, bookmarkService);
+        this._removeButton = new RemoveButton(
+            contextMenuService,
+            contextMenuApiService,
+            bookmarkService
+        );
+        this._addToFolderButton = new AddToFolderButton(
+            contextMenuService,
+            contextMenuApiService,
+            bookmarkApiService,
+            bookmarkService
+        );
     }
 
     public initialize() {
-        this._bookmarkService.getTree().then((bookmarkTree) => {
+        this._bookmarkApiService.getTree().then((bookmarkTree) => {
             if (!!bookmarkTree) {
                 this._contextMenuService.add(bookmarkTree[0].id, this._rootFolderName).then(() => {
                     this._addButton.createButton(bookmarkTree[0].id);
@@ -35,9 +51,7 @@ export class ContextMenu {
                     this._addToFolderButton.createButton(bookmarkTree[0].id);
                     this._contextMenuService.addSeparator(bookmarkTree[0].id);
                     this.setAddState();
-                    this.createBookmarkTree(<browser.bookmarks.BookmarkTreeNode[]>(
-                        bookmarkTree[0].children
-                    ));
+                    this.createBookmarkTree(<IBookmarkTreeNode[]>bookmarkTree[0].children);
                 });
             }
         });
@@ -56,7 +70,7 @@ export class ContextMenu {
     }
 
     public toggleButtons(url?: string) {
-        this._bookmarkService.search({ url }).then((results) => {
+        this._bookmarkApiService.search({ url }).then((results) => {
             if (results.length !== 0) {
                 this.setRemoveState();
             } else {
@@ -70,29 +84,17 @@ export class ContextMenu {
     }
 
     public remove(menuItemId: string): void {
-        this._contextMenuService.remove(menuItemId);
+        this._contextMenuApiService.remove(menuItemId);
     }
 
     public update(id: string, changeInfo: IContextMenuUpdateProperties) {
-        this._contextMenuService.update(id, changeInfo);
+        this._contextMenuApiService.update(id, changeInfo);
     }
 
-    public createBookmarkTree(bookmarkTreeNode: browser.bookmarks.BookmarkTreeNode[]): void {
-        bookmarkTreeNode.forEach((node) => {
-            this.add(node.id, <string>node.parentId, node.title);
-            if (!!node.children) {
-                this.createBookmarkTree(node.children);
-            }
-        });
-    }
-
-    private open(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void {
-        console.log(info, tab);
-        this._bookmarkService.get(<string>info.menuItemId).then((results) => {
+    private open(info: IContextMenuOnClickData, tab: browser.tabs.Tab): void {
+        this._bookmarkApiService.get(<string>info.menuItemId).then((results) => {
             const url = results[0].url;
-            console.log(url);
             browser.tabs.create({ active: true, url, windowId: tab.windowId });
-            // window.open(url, "_blank");
         });
     }
 }

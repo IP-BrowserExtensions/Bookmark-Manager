@@ -1,16 +1,25 @@
+import { ContextMenuApiService } from "@api/context-menu/context-menu-api.service";
 import { IContextMenuOnClickData } from "@api/context-menu/types/context-menu-api";
 
 import { ContextMenuService } from "../context-menu.service";
 
 export abstract class Button {
-    protected _id: string;
-    protected _buttonName: string;
-    protected _contextMenuService: ContextMenuService;
+    protected readonly _contextMenuService: ContextMenuService;
+    protected readonly _contextMenuApiService: ContextMenuApiService;
 
-    public constructor(contextMenuService: ContextMenuService, id: string, buttonName: string) {
-        this._contextMenuService = contextMenuService;
+    private readonly _id: string;
+    private readonly _buttonName: string;
+
+    public constructor(
+        id: string,
+        buttonName: string,
+        contextMenuService: ContextMenuService,
+        contextMenuApiService: ContextMenuApiService
+    ) {
         this._id = id;
         this._buttonName = buttonName;
+        this._contextMenuService = contextMenuService;
+        this._contextMenuApiService = contextMenuApiService;
     }
 
     public createButton(parentId: string): void {
@@ -18,11 +27,11 @@ export abstract class Button {
     }
 
     public setVisible() {
-        this._contextMenuService.update(this._id, { visible: true });
+        this._contextMenuApiService.update(this._id, { visible: true });
     }
 
     public setInvisible() {
-        this._contextMenuService.update(this._id, { visible: false });
+        this._contextMenuApiService.update(this._id, { visible: false });
     }
 
     protected abstract action(info: IContextMenuOnClickData, tab: browser.tabs.Tab): void;
