@@ -1,4 +1,4 @@
-import { ContextMenuWrapper } from "@wrapper/context-menu/context-menu-wrapper";
+import { ContextMenuWrapper } from "@api/context-menu/context-menu-wrapper";
 
 export class ContextMenuService {
     public add(

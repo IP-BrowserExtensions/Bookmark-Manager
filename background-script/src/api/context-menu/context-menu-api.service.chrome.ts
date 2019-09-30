@@ -1,10 +1,7 @@
+import { IContextMenuCreateProperties, IContextMenuUpdateProperties } from "@api/context-menu/types/context-menu-api";
 import { HelperService } from "@helpers/helper.service";
-import {
-    IContextMenuCreateProperties,
-    IContextMenuUpdateProperties,
-} from "@wrapper/context-menu/context-menu-interface-wrapper";
 
-export class ContextMenuWrapper {
+export class ContextMenuApiService {
     public static create(createProperties: IContextMenuCreateProperties): Promise<void> {
         return HelperService.callbackToPromise(chrome.contextMenus.create, [createProperties]);
     }

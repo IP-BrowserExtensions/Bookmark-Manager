@@ -1,3 +1,5 @@
+import { IContextMenuOnClickData } from "@api/context-menu/types/context-menu-api";
+
 import { ContextMenuService } from "../context-menu.service";
 
 export abstract class Button {
@@ -23,5 +25,5 @@ export abstract class Button {
         this._contextMenuService.update(this._id, { visible: false });
     }
 
-    protected abstract action(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void;
+    protected abstract action(info: IContextMenuOnClickData, tab: browser.tabs.Tab): void;
 }

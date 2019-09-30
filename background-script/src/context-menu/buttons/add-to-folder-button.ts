@@ -1,3 +1,5 @@
+import { IContextMenuOnClickData } from "@api/context-menu/types/context-menu-api";
+
 import { BookmarkService } from "../../bookmark/bookmark.service";
 import { ContextMenuService } from "../context-menu.service";
 import { Button } from "./button";
@@ -10,7 +12,7 @@ export class AddToFolderButton extends Button {
         this._bookmarkService = bookmarkService;
     }
 
-    protected action(info: browser.menus.OnClickData, tab: browser.tabs.Tab): void {
+    protected action(info: IContextMenuOnClickData, tab: browser.tabs.Tab): void {
         this._bookmarkService.get(`${info.menuItemId}`).then((results) => {
             if (!!tab && !!tab.url && !!tab.title) {
                 this._bookmarkService.add(tab.title, tab.url, results[0].title);

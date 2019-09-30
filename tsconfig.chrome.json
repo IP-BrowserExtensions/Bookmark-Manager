@@ -3,7 +3,7 @@
     "compilerOptions": {
         "typeRoots": ["node_modules/@types"],
         "paths": {
-            "@wrapper/*": ["background-script/src/wrapper/*.chrome.ts"],
+            "@api/*": ["background-script/src/api/*.chrome.ts"],
             "@helpers/*": ["background-script/src/helpers/*.ts"]
         }
     }

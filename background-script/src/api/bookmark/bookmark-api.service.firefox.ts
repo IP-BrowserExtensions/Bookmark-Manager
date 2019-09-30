@@ -4,9 +4,9 @@ import {
     IBookmarkDestination,
     IBookmarkSearchQuery,
     IBookmarkTreeNode,
-} from "@wrapper/bookmark/bookmark-interface-wrapper";
+} from "@api/bookmark/types/bookmark-api";
 
-export class BookmarkWrapper {
+export class BookmarkApiService {
     public static get(id: string): Promise<IBookmarkTreeNode[]> {
         return browser.bookmarks.get(id);
     }

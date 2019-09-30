@@ -4,9 +4,10 @@ import {
     IBookmarkDestination,
     IBookmarkSearchQuery,
     IBookmarkTreeNode,
-} from "@wrapper/bookmark/bookmark-interface-wrapper";
+} from "@api/bookmark/types/bookmark-api";
+import { HelperService } from "@helpers/helper.service";
 
-export class BookmarkWrapper {
+export class BookmarkApiService {
     public static get(id: string): Promise<IBookmarkTreeNode[]> {
         return HelperService.callbackToPromise(chrome.bookmarks.get, [id]);
     }

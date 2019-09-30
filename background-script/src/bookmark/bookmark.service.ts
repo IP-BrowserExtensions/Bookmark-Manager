@@ -1,5 +1,5 @@
-import { IBookmarkSearchQuery } from "@wrapper/bookmark/bookmark-interface-wrapper";
-import { BookmarkWrapper } from "@wrapper/bookmark/bookmark-wrapper";
+import { BookmarkApiService } from "@api/bookmark/bookmark-api.service";
+import { IBookmarkSearchQuery } from "@api/bookmark/types/bookmark-api";
 
 export class BookmarkService {
     private _defaultBookmarkFolders: browser.bookmarks.BookmarkTreeNode[] = [];
@@ -13,7 +13,7 @@ export class BookmarkService {
     public add(title: string, url: string, folderName: string): void {
         this.search({ title: folderName }).then((results) => {
             if (!!results && results.length !== 0) {
-                BookmarkWrapper.create({ parentId: results[0].id, title, url });
+                BookmarkApiService.create({ parentId: results[0].id, title, url });
             }
         });
     }
@@ -22,10 +22,10 @@ export class BookmarkService {
         this.search({ title: this._defaultUserFolder }).then((results) => {
             if (!results || (!!results && results.length === 0)) {
                 this.createDefaultUserFolder().then((result) => {
-                    BookmarkWrapper.create({ parentId: result.id, title, url });
+                    BookmarkApiService.create({ parentId: result.id, title, url });
                 });
             }
-            BookmarkWrapper.create({ parentId: results[0].id, title, url });
+            BookmarkApiService.create({ parentId: results[0].id, title, url });
         });
     }
 
@@ -36,24 +36,24 @@ export class BookmarkService {
     }
 
     public get(id: string): Promise<browser.bookmarks.BookmarkTreeNode[]> {
-        return BookmarkWrapper.get(id);
+        return BookmarkApiService.get(id);
     }
 
     public getTree(): Promise<browser.bookmarks.BookmarkTreeNode[]> {
-        return BookmarkWrapper.getTree();
+        return BookmarkApiService.getTree();
     }
     public search(
         query: IBookmarkSearchQuery | string
     ): Promise<browser.bookmarks.BookmarkTreeNode[]> {
-        return BookmarkWrapper.search(query);
+        return BookmarkApiService.search(query);
     }
 
     private remove(id: string): Promise<void> {
-        return BookmarkWrapper.remove(id);
+        return BookmarkApiService.remove(id);
     }
 
     private createDefaultUserFolder(): Promise<browser.bookmarks.BookmarkTreeNode> {
-        return BookmarkWrapper.create({
+        return BookmarkApiService.create({
             parentId: (<browser.bookmarks.BookmarkTreeNode>(
                 this._defaultBookmarkFolders.find((x) => x.title === "Bookmarks bar")
             )).id,
@@ -62,7 +62,7 @@ export class BookmarkService {
     }
 
     private getDefaultBookmarkFolders(): void {
-        BookmarkWrapper.getTree().then((bookmarkTree) => {
+        BookmarkApiService.getTree().then((bookmarkTree) => {
             if (!!bookmarkTree) {
                 (<browser.bookmarks.BookmarkTreeNode[]>bookmarkTree[0].children).forEach(
                     (element) => {

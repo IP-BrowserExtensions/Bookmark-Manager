@@ -1,4 +1,4 @@
-import { IContextMenuUpdateProperties } from "@wrapper/context-menu/context-menu-interface-wrapper";
+import { IContextMenuUpdateProperties } from "@api/context-menu/types/context-menu-api";
 
 import { BookmarkService } from "./../bookmark/bookmark.service";
 import { AddButton } from "./buttons/add-button";
