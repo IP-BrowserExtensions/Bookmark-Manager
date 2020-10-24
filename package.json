@@ -1,24 +1,52 @@
 {
-    "name": "bookmark-manager",
-    "version": "1.0.0",
-    "description": "Chromium Extension",
-    "author": "Iulian Preda",
-    "license": "AGPL-3.0-or-later",
-    "private": true,
-    "scripts": {
-        "build": "node ./build-dist.js && tsc",
-        "watch": "node ./build-dist.js && tsc --watch",
-        "build:webpack": "node ./build-dist.js && webpack",
-        "watch:webpack": "node ./build-dist.js && webpack --watch",
-        "watch:firefox": " cd ./dist && web-ext run"
-    },
-    "devDependencies": {
-        "@types/chrome": "0.0.88",
-        "ts-loader": "^6.1.2",
-        "tslint": "^5.20.0",
-        "typescript": "^3.6.3",
-        "web-ext-types": "IulianOctavianPreda/web-ext-types#master",
-        "webpack": "^4.40.2",
-        "webpack-cli": "^3.3.9"
-    }
+  "name": "open-bookmark-manager",
+  "version": "1.0.0",
+  "author": "Iulian Preda",
+  "license": "AGPL-3.0-or-later",
+  "description": "Cross-browser compatible bookmark manager",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "dependencies": {
+    "@angular/animations": "~10.1.6",
+    "@angular/common": "~10.1.6",
+    "@angular/compiler": "~10.1.6",
+    "@angular/core": "~10.1.6",
+    "@angular/forms": "~10.1.6",
+    "@angular/platform-browser": "~10.1.6",
+    "@angular/platform-browser-dynamic": "~10.1.6",
+    "@angular/router": "~10.1.6",
+    "rxjs": "~6.6.0",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.10.2",
+    "webextension-polyfill": "^0.6.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "~0.1001.7",
+    "@angular/cli": "~10.1.7",
+    "@angular/compiler-cli": "~10.1.6",
+    "@types/firefox": "0.0.30",
+    "@types/jasmine": "~3.5.0",
+    "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^12.11.1",
+    "codelyzer": "^6.0.0",
+    "jasmine-core": "~3.6.0",
+    "jasmine-spec-reporter": "~5.0.0",
+    "karma": "~5.0.0",
+    "karma-chrome-launcher": "~3.1.0",
+    "karma-coverage-istanbul-reporter": "~3.0.2",
+    "karma-jasmine": "~4.0.0",
+    "karma-jasmine-html-reporter": "^1.5.0",
+    "protractor": "~7.0.0",
+    "ts-node": "~8.3.0",
+    "tslint": "~6.1.0",
+    "typescript": "~4.0.2"
+  }
 }

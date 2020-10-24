@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Open Bookmark Manager",
+  "version": "1.0",
+  "description": "Bookmark Manager",
+  "icons": {
+    "128": "./assets/logo.png"
+  },
+  "background": {
+    "scripts": ["./background.js"]
+  },
+  "permissions": ["contextMenus", "bookmarks", "tabs"],
+  "browser_action": {
+    "default_icon": "./assets/logo.png",
+    "default_popup": "popup.html"
+  }
+}
