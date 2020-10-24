@@ -38,7 +38,7 @@ export class ContextMenu {
     );
   }
 
-  public initialize() {
+  public initialize(): void {
     this._bookmarkApiService.getTree().then((bookmarkTree) => {
       if (!!bookmarkTree) {
         this._contextMenuService.add(bookmarkTree[0].id, this._rootFolderName).then(() => {

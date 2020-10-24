@@ -1,5 +1,7 @@
 export interface IBookmarkTreeNode extends browser.bookmarks.BookmarkTreeNode {}
 export interface IBookmarkCreate extends browser.bookmarks.CreateDetails {}
-export interface IBookmarkDestination extends browser.bookmarks.Destination {}
-export interface IBookmarkChanges extends browser.bookmarks.Changes {}
-export interface IBookmarkSearchQuery extends browser.bookmarks.SearchQuery {}
+
+/** Types taken from chrome since they are compatible */
+export interface IBookmarkDestination extends chrome.bookmarks.BookmarkDestinationArg {}
+export interface IBookmarkChanges extends chrome.bookmarks.BookmarkChangesArg {}
+export interface IBookmarkSearchQuery extends chrome.bookmarks.BookmarkSearchQuery {}
