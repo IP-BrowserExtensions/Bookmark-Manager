@@ -1,6 +1,6 @@
-import { IBookmarkTreeNode } from '@api/bookmark/types/bookmark-api';
-import { ContextMenuApiService } from '@api/context-menu/context-menu-api.service';
-import { IContextMenuOnClickData } from '@api/context-menu/types/context-menu-api';
+import { ContextMenuApiService } from '@api/api-services/context-menu-api.service';
+import { IBookmarkTreeNode } from '@api/types/bookmark-api';
+import { IContextMenuOnClickData } from '@api/types/context-menu-api';
 
 export class ContextMenuService {
   private readonly _contextMenuApiService: ContextMenuApiService;

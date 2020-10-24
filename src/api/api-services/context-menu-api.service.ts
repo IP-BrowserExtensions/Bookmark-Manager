@@ -1,4 +1,4 @@
-import { IContextMenuCreateProperties, IContextMenuUpdateProperties } from '@api/context-menu/types/context-menu-api';
+import { IContextMenuCreateProperties, IContextMenuUpdateProperties } from '@api/types/context-menu-api';
 import { HelperService } from '@helpers/helper.service';
 
 export class ContextMenuApiService {

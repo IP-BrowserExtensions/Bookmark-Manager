@@ -1,7 +1,7 @@
-import { BookmarkApiService } from '@api/bookmark/bookmark-api.service';
-import { IBookmarkTreeNode } from '@api/bookmark/types/bookmark-api';
-import { ContextMenuApiService } from '@api/context-menu/context-menu-api.service';
-import { IContextMenuOnClickData, IContextMenuUpdateProperties } from '@api/context-menu/types/context-menu-api';
+import { BookmarkApiService } from '@api/api-services/bookmark-api.service';
+import { ContextMenuApiService } from '@api/api-services/context-menu-api.service';
+import { IBookmarkTreeNode } from '@api/types/bookmark-api';
+import { IContextMenuOnClickData, IContextMenuUpdateProperties } from '@api/types/context-menu-api';
 
 import { BookmarkService } from './../bookmark/bookmark.service';
 import { AddButton } from './buttons/add-button';

@@ -1,9 +1,9 @@
-import { BookmarkApiService } from '@api/bookmark/bookmark-api.service';
-import { ContextMenuApiService } from '@api/context-menu/context-menu-api.service';
-import { IContextMenuOnClickData } from '@api/context-menu/types/context-menu-api';
+import { BookmarkApiService } from '@api/api-services/bookmark-api.service';
+import { ContextMenuApiService } from '@api/api-services/context-menu-api.service';
+import { IContextMenuOnClickData } from '@api/types/context-menu-api';
+import { BookmarkService } from 'src/background-script/bookmark/bookmark.service';
 
 import { ContextMenuService } from '../context-menu.service';
-import { BookmarkService } from './../../bookmark/bookmark.service';
 import { Button } from './button';
 
 export class AddToFolderButton extends Button {
