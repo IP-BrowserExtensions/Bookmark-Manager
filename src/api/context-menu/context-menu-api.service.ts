@@ -1,5 +1,5 @@
-import { IContextMenuCreateProperties, IContextMenuUpdateProperties } from "@api/context-menu/types/context-menu-api";
-import { HelperService } from "@helpers/helper.service";
+import { IContextMenuCreateProperties, IContextMenuUpdateProperties } from '@api/context-menu/types/context-menu-api';
+import { HelperService } from '@helpers/helper.service';
 
 export class ContextMenuApiService {
   public create(createProperties: IContextMenuCreateProperties): Promise<void> {

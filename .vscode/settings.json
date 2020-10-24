@@ -1,21 +1,17 @@
 {
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "bracket-pair-colorizer-2.colorMode": "Independent",
-    "bracket-pair-colorizer-2.forceIterationColorCycle": true,
-    "bracket-pair-colorizer-2.forceUniqueOpeningColor": true,
-    "editor.formatOnSave": true,
-    "prettier.arrowParens": "always",
-    "prettier.printWidth": 100,
-    "prettier.tabWidth": 4,
-    "prettier.useTabs": false,
-    "typescriptHero.imports.organizeOnSave": true,
-    "typescriptHero.imports.stringQuoteStyle": "\""
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "bracket-pair-colorizer-2.colorMode": "Independent",
+  "bracket-pair-colorizer-2.forceIterationColorCycle": true,
+  "bracket-pair-colorizer-2.forceUniqueOpeningColor": true,
+  "editor.formatOnSave": true,
+  "typescriptHero.imports.organizeOnSave": true,
+  "typescriptHero.imports.stringQuoteStyle": "'"
 }
