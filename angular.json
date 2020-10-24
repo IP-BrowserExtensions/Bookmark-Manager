@@ -15,8 +15,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+            "customWebpackConfig": {
+              "path": "./custom-webpack.config.js"
+            },
             "outputPath": "dist/open-bookmark-manager",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -25,7 +28,7 @@
             "aot": true,
             "assets": ["src/favicon.ico", "src/assets", "src/manifest.json"],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": ["node_modules/webextension-polyfill/dist/browser-polyfill.min.js"]
           },
           "configurations": {
             "production": {
