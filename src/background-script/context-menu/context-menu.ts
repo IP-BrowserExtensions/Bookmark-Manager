@@ -1,6 +1,5 @@
 import { BookmarkApiService } from '@api/api-services/bookmark-api.service';
 import { ContextMenuApiService } from '@api/api-services/context-menu-api.service';
-import { IBookmarkTreeNode } from '@api/types/bookmark-api';
 import { IContextMenuOnClickData, IContextMenuUpdateProperties } from '@api/types/context-menu-api';
 
 import { BookmarkService } from './../bookmark/bookmark.service';
@@ -39,20 +38,17 @@ export class ContextMenu {
   }
 
   public initialize(): void {
-    console.log('bbb');
-    console.log(this._bookmarkApiService.getTree());
-
     this._bookmarkApiService.getTree().then((bookmarkTree) => {
-      if (!!bookmarkTree) {
-        this._contextMenuService.add(bookmarkTree[0].id, this._rootFolderName).then(() => {
-          this._addButton.createButton(bookmarkTree[0].id);
-          this._removeButton.createButton(bookmarkTree[0].id);
-          this._addToFolderButton.createButton(bookmarkTree[0].id);
-          this._contextMenuService.addSeparator(bookmarkTree[0].id);
-          this.setAddState();
-          this._contextMenuService.createBookmarkTree(<IBookmarkTreeNode[]>bookmarkTree[0].children);
-        });
-      }
+      // if (!!bookmarkTree) {
+      //   this._contextMenuService.add(bookmarkTree[0].id, this._rootFolderName).then(() => {
+      //     this._addButton.createButton(bookmarkTree[0].id);
+      //     this._removeButton.createButton(bookmarkTree[0].id);
+      //     this._addToFolderButton.createButton(bookmarkTree[0].id);
+      //     this._contextMenuService.addSeparator(bookmarkTree[0].id);
+      //     this.setAddState();
+      //     this._contextMenuService.createBookmarkTree(<IBookmarkTreeNode[]>bookmarkTree[0].children);
+      //   });
+      // }
     });
   }
 
