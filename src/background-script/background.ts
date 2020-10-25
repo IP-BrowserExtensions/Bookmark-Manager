@@ -1,17 +1,16 @@
+import { IActiveTabInfo } from '@api/types/tabs-api';
+
 import { ContextMenu } from './context-menu/context-menu';
 
 const contextMenu = new ContextMenu();
 
-let activeTabInfo: {
-  tabId: number;
-  windowId: number;
-};
-
+let activeTabInfo: IActiveTabInfo;
 browser.runtime.onInstalled.addListener(() => {
   contextMenu.initialize();
 });
 
 browser.runtime.onStartup.addListener(() => {
+  console.log('aaa');
   contextMenu.initialize();
 });
 

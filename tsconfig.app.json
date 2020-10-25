@@ -3,13 +3,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@api/*": ["src/api/*.ts"],
+      "@helpers/*": ["src/helpers/*.ts"]
+    }
+    // "types": ["chrome", "browser"]
   },
-  "files": [
-    "src/main.ts",
-    "src/polyfills.ts"
-  ],
-  "include": [
-    "src/**/*.d.ts"
-  ]
+  "files": ["src/main.ts", "src/polyfills.ts", "src/background-script/background.ts"],
+  "include": ["src/**/*.d.ts"]
 }

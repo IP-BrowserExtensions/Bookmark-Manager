@@ -1,5 +1,5 @@
-import { BookmarkApiService } from '@api/bookmark/bookmark-api.service';
-import { IBookmarkTreeNode } from '@api/bookmark/types/bookmark-api';
+import { BookmarkApiService } from '@api/api-services/bookmark-api.service';
+import { IBookmarkTreeNode } from '@api/types/bookmark-api';
 
 export class BookmarkService {
   private _bookmarkApiService: BookmarkApiService;

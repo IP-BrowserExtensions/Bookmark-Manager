@@ -13,8 +13,8 @@ export class ContextMenuService {
     title: string,
     parentId?: string,
     onclick?: (info: IContextMenuOnClickData, tab: browser.tabs.Tab) => void,
-    type: browser.menus.ItemType = 'normal',
-    contexts: browser.menus.ContextType[] = ['all']
+    type: browser.contextMenus.ItemType = 'normal',
+    contexts: browser.contextMenus.ContextType[] = ['all']
   ): Promise<void> {
     return this._contextMenuApiService.create({
       id,
@@ -26,7 +26,7 @@ export class ContextMenuService {
     });
   }
 
-  public addSeparator(parentId: string, contexts: browser.menus.ContextType[] = ['all']): Promise<void> {
+  public addSeparator(parentId: string, contexts: browser.contextMenus.ContextType[] = ['all']): Promise<void> {
     return this._contextMenuApiService.create({
       parentId,
       type: 'separator',

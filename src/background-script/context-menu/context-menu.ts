@@ -39,6 +39,9 @@ export class ContextMenu {
   }
 
   public initialize(): void {
+    console.log('bbb');
+    console.log(this._bookmarkApiService.getTree());
+
     this._bookmarkApiService.getTree().then((bookmarkTree) => {
       if (!!bookmarkTree) {
         this._contextMenuService.add(bookmarkTree[0].id, this._rootFolderName).then(() => {
@@ -47,7 +50,7 @@ export class ContextMenu {
           this._addToFolderButton.createButton(bookmarkTree[0].id);
           this._contextMenuService.addSeparator(bookmarkTree[0].id);
           this.setAddState();
-          this.createBookmarkTree(<IBookmarkTreeNode[]>bookmarkTree[0].children);
+          this._contextMenuService.createBookmarkTree(<IBookmarkTreeNode[]>bookmarkTree[0].children);
         });
       }
     });

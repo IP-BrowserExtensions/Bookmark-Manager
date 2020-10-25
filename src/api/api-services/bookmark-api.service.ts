@@ -1,10 +1,10 @@
 import {
-    IBookmarkChanges,
-    IBookmarkCreate,
-    IBookmarkDestination,
-    IBookmarkSearchQuery,
-    IBookmarkTreeNode
-} from '@api/bookmark/types/bookmark-api';
+  IBookmarkChanges,
+  IBookmarkCreate,
+  IBookmarkDestination,
+  IBookmarkSearchQuery,
+  IBookmarkTreeNode
+} from '@api/types/bookmark-api';
 
 export class BookmarkApiService {
   public get(id: string): Promise<IBookmarkTreeNode[]> {

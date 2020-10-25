@@ -10,8 +10,8 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es6",
-    "module": "es2020",
-    "lib": ["es2018", "dom"],
+    "module": "esnext",
+    "lib": ["esnext", "dom"],
     /* Strict Type-Checking Options */
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
@@ -24,13 +24,13 @@
 
     /* Additional Checks */
     "noUnusedLocals": true /* Report errors on unused locals. */,
-    "noUnusedParameters": true /* Report errors on unused parameters. */,
-    "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
+    "noUnusedParameters": false /* Report errors on unused parameters. */,
+    "noImplicitReturns": false /* Report error when not all code paths in function return a value. */,
     "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
 
     /* Module Resolution Options */
     "baseUrl": "./",
-    // "typeRoots": [],
+    "typeRoots": ["node_modules/@types"],
     "paths": {
       "@api/*": ["src/api/*.ts"],
       "@helpers/*": ["src/helpers/*.ts"]

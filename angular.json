@@ -112,5 +112,8 @@
       }
     }
   },
-  "defaultProject": "open-bookmark-manager"
+  "defaultProject": "open-bookmark-manager",
+  "cli": {
+    "analytics": false
+  }
 }

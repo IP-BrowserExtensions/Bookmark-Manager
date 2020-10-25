@@ -7,15 +7,14 @@
     "128": "./assets/logo.png"
   },
   "background": {
-    "scripts": ["./background.js"]
+    "scripts": ["runtime.js", "scripts.js", "background.js"]
   },
   "permissions": ["contextMenus", "bookmarks", "tabs"],
   "browser_action": {
     "default_icon": "./assets/logo.png",
     "default_popup": "index.html"
   },
-  "options-page": {
-    "page": "./index.html",
-    "open_in_tab": false
-  }
+  "options_page": "index.html",
+
+  "offline_enabled": true
 }
