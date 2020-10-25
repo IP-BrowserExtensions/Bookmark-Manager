@@ -28,7 +28,7 @@
             "aot": true,
             "assets": ["src/favicon.ico", "src/assets", "src/manifest.json"],
             "styles": ["src/styles.scss"],
-            "scripts": ["node_modules/webextension-polyfill/dist/browser-polyfill.min.js"]
+            "scripts": ["node_modules/webextension-polyfill/dist/browser-polyfill.js"]
           },
           "configurations": {
             "production": {

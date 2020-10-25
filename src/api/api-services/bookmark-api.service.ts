@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import {
   IBookmarkChanges,
   IBookmarkCreate,
@@ -6,6 +7,9 @@ import {
   IBookmarkTreeNode
 } from '@api/types/bookmark-api';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class BookmarkApiService {
   public get(id: string): Promise<IBookmarkTreeNode[]> {
     return browser.bookmarks.get(id);
