@@ -10,7 +10,6 @@ browser.runtime.onInstalled.addListener(() => {
 });
 
 browser.runtime.onStartup.addListener(() => {
-  console.log('aaa');
   contextMenu.initialize();
 });
 
