@@ -39,7 +39,7 @@ export class BookmarkService {
 
   private createUserFolder(): Promise<IBookmarkTreeNode> {
     return this._bookmarkApiService.create({
-      parentId: (<IBookmarkTreeNode>this._rootFolders[0]).id,
+      parentId: (<IBookmarkTreeNode> this._rootFolders[0]).id,
       title: this._userFolder
     });
   }
@@ -47,7 +47,7 @@ export class BookmarkService {
   private getDefaultBookmarkFolders(): void {
     this._bookmarkApiService.getTree().then((bookmarkTree) => {
       if (!!bookmarkTree) {
-        (<IBookmarkTreeNode[]>bookmarkTree[0].children).forEach((element) => {
+        (<IBookmarkTreeNode[]> bookmarkTree[0].children).forEach((element) => {
           this._rootFolders.push({ ...element, children: undefined });
         });
       }

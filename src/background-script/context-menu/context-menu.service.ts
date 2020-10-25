@@ -36,7 +36,7 @@ export class ContextMenuService {
 
   public createBookmarkTree(bookmarkTreeNode: IBookmarkTreeNode[]): void {
     bookmarkTreeNode.forEach((node) => {
-      this.add(node.id, <string>node.parentId, node.title);
+      this.add(node.id, <string> node.parentId, node.title);
       if (!!node.children) {
         this.createBookmarkTree(node.children);
       }

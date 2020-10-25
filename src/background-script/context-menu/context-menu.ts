@@ -87,7 +87,7 @@ export class ContextMenu {
   }
 
   private open(info: IContextMenuOnClickData, tab: browser.tabs.Tab): void {
-    this._bookmarkApiService.get(<string>info.menuItemId).then((results) => {
+    this._bookmarkApiService.get(<string> info.menuItemId).then((results) => {
       const url = results[0].url;
       browser.tabs.create({ active: true, url, windowId: tab.windowId });
     });

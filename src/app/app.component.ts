@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'open-bookmark-manager';
+  public title = 'open-bookmark-manager';
 }

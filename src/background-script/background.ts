@@ -33,7 +33,7 @@ browser.bookmarks.onChanged.addListener((id, changeInfo) => {
 });
 
 browser.bookmarks.onCreated.addListener((id, bookmarkTreeNode) => {
-  contextMenu.add(id, <string>bookmarkTreeNode.parentId, bookmarkTreeNode.title);
+  contextMenu.add(id, <string> bookmarkTreeNode.parentId, bookmarkTreeNode.title);
   contextMenu.setRemoveState();
 });
 
